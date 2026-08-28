@@ -24,16 +24,16 @@ export default function Navbar() {
                 <span className="sr-only">Open main menu</span>
                 <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" data-dm-proxy-injected="true"><path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M5 7h14M5 12h14M5 17h14"/></svg>
             </button>
-            <div className="hidden w-full font-bold md:block md:w-auto" id="navbar-default">
-              <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
+            <div className="hidden w-full font-bold md:block md:w-auto bg-background border-1 rounded-full" id="navbar-default">
+              <ul className="font-medium flex flex-row flex-nowrap gap-1 justify-center md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
                 {menus.map((menu) => {
                     const isActive = menu.href === "/" ? pathname === "/" : pathname.startsWith(menu.href);
                     return (
-                        <li key={menu.name}>
+                        <li key={menu.name} className="text-center py-2 px-4 m-0 border border-transparent rounded-full">
                             <Link 
                             key={menu.name}
                             href={menu.href}
-                            className={`block py-2 px-3 bg-brand rounded md:bg-transparent md:text-fg-brand md:p-0 ${isActive ? 'text-secondary' : 'text-white'}`}
+                            className={`text-center block bg-brand rounded md:bg-transparent md:text-fg-brand md:p-0 ${isActive ? 'text-secondary' : 'text-white'}`}
                             >
                                 {menu.name}
                             </Link>
