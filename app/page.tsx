@@ -1,6 +1,5 @@
 import LinkedInIcon from "./global/icons/linkedin";
 import GithubIcon from "./global/icons/github";
-import Image from "next/image"
 
 export default function Home() {
   return (
