@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -20,7 +19,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body>
         <nav className="fixed w-full z-20 top-0 start-0 border-default">
-          <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 xl:w-1/2 w-3xl">
+          <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 2xl:w-1/2">
             <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
                 <span className="self-center text-xl text-white font-semibold whitespace-nowrap"><strong className="text-primary">K</strong>orrawit.</span>
             </a>
