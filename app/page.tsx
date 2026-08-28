@@ -17,8 +17,8 @@ export default function Home() {
               </p>
             </div>
             <div className="flex">
-              <LinkedInIcon className="m-2" />
-              <GithubIcon className="m-2" />
+              <LinkedInIcon className="size-[24px] m-2" />
+              <GithubIcon  className="size-[24px] m-2" />
             </div>
           </div>
           <div className="lg:flex flex-col justify-center self-center hidden w-1/3">
