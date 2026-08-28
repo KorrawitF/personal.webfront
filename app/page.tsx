@@ -1,5 +1,6 @@
 import LinkedInIcon from "./global/icons/linkedin";
 import GithubIcon from "./global/icons/github";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -17,8 +18,12 @@ export default function Home() {
               </p>
             </div>
             <div className="flex">
-              <LinkedInIcon className="size-[24px] m-2" />
-              <GithubIcon  className="size-[24px] m-2" />
+              <Link href="">
+                <LinkedInIcon className="size-[24px] m-2" />
+              </Link>
+              <Link href="">
+                <GithubIcon  className="size-[24px] m-2" />
+              </Link>
             </div>
           </div>
           <div className="lg:flex flex-col justify-center self-center hidden w-1/3">

@@ -28,8 +28,6 @@ export default function Navbar() {
               <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
                 {menus.map((menu) => {
                     const isActive = menu.href === "/" ? pathname === "/" : pathname.startsWith(menu.href);
-                    console.log(isActive);
-                    console.log(menu.href);
                     return (
                         <li key={menu.name}>
                             <Link 
