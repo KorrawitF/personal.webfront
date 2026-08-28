@@ -1,5 +1,5 @@
-import Image from "next/image";
 import LinkedInIcon from "./global/icons/linkedin";
+import GithubIcon from "./global/icons/github";
 
 export default function Home() {
   return (
@@ -16,9 +16,10 @@ export default function Home() {
                 I'm a Software Engineer focused on building scalable systems, solving challenging problems, and turning ideas into software that works.
               </p>
             </div>
-            <>
-              <LinkedInIcon />
-            </>
+            <div className="flex">
+              <LinkedInIcon className="m-2" />
+              <GithubIcon className="m-2" />
+            </div>
           </div>
           <div className="lg:flex flex-col justify-center self-center hidden">
             Image here
