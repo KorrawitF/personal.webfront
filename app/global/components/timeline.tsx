@@ -3,10 +3,10 @@
 import { ReactNode } from "react";
 import  Image  from "./image"
 
-export default async function TimeLine({items} : {items: TimeLineProps[]}) {
+export default async function TimeLine({className, items} : {className: string, items: TimeLineProps[]}) {
     return (
         <>
-            <ol className="relative border-s border-default text-white">          
+            <ol className={`relative border-s border-default text-white ${className}`}>          
                 {items.map((item) => {
                     return (
                         <li className="mb-10 ms-6 w-full" key={item.id}>      
