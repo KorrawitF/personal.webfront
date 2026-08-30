@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const menus = [
   { name: "Home", href: "/" },
@@ -15,6 +15,32 @@ const menus = [
 export default function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navListRef = useRef<HTMLUListElement>(null);
+  const itemRefs = useRef<Array<HTMLLIElement | null>>([]);
+  const [pillStyle, setPillStyle] = useState({
+    transform: "translate(0px, 0px)",
+    width: "0px",
+    height: "0px",
+  });
+
+  useEffect(() => {
+    const activeIndex = menus.findIndex((menu) =>
+      menu.href === "/" ? pathname === "/" : pathname.startsWith(menu.href),
+    );
+
+    const activeItem = itemRefs.current[activeIndex];
+    const navList = navListRef.current;
+
+    if (!activeItem || !navList) {
+      return;
+    }
+
+    setPillStyle({
+      transform: `translate(${activeItem.offsetLeft}px, ${activeItem.offsetTop}px)`,
+      width: `${activeItem.offsetWidth}px`,
+      height: `${activeItem.offsetHeight}px`,
+    });
+  }, [pathname, isMenuOpen]);
 
   return (
     <nav className="fixed left-0 right-0 top-0 z-20">
@@ -28,7 +54,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setIsMenuOpen((prev) => !prev)}
-          className={`inline-flex h-10 w-10 items-center justify-center rounded-base text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-neutral-tertiary md:hidden transition-transform ${isMenuOpen && 'rotate-90'}`}
+          className={`inline-flex h-10 w-10 items-center justify-center rounded-base text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-neutral-tertiary md:hidden transition-transform ${isMenuOpen && "rotate-90"}`}
           aria-controls="navbar-menu"
           aria-expanded={isMenuOpen}
           aria-label={isMenuOpen ? "Close main menu" : "Open main menu"}
@@ -58,28 +84,37 @@ export default function Navbar() {
           id="navbar-menu"
         >
           <ul
-            className={`mt-4 flex flex-col gap-2 border-0 bg-background p-2 transition-all duration-300 ease-out md:mt-0 md:flex-row md:items-center md:gap-1 md:rounded-full md:border md:border-white/10 md:p-0 ${
+            ref={navListRef}
+            className={`relative mt-4 flex flex-col gap-2 border-0 bg-background p-2 transition-all duration-300 ease-out md:mt-0 md:flex-row md:items-center md:gap-1 md:rounded-full md:border md:border-white/10 md:p-0 ${
               isMenuOpen
                 ? "translate-y-0 opacity-100"
                 : "-translate-y-2 opacity-0 md:translate-y-0 md:opacity-100"
             }`}
           >
-            {menus.map((menu) => {
+            <div
+              className="pointer-events-none absolute z-0 rounded-full bg-primary shadow-[0_0_0_1px_rgba(255,255,255,0.08)] transition-[transform,width,height] duration-300 ease-out"
+              style={{
+                transform: pillStyle.transform,
+                width: pillStyle.width,
+                height: pillStyle.height,
+              }}
+            />
+
+            {menus.map((menu, index) => {
               const isActive = menu.href === "/" ? pathname === "/" : pathname.startsWith(menu.href);
 
               return (
                 <li
                   key={menu.name}
-                  className={`rounded-full border text-center transition-colors ${
-                    isActive
-                      ? "border-special bg-primary"
-                      : "border-transparent hover:border-white/20"
-                  }`}
+                  ref={(node) => {
+                    itemRefs.current[index] = node;
+                  }}
+                  className="relative z-10 flex-1 grow text-center"
                 >
                   <Link
                     href={menu.href}
                     onClick={() => setIsMenuOpen(false)}
-                    className={`block rounded-full px-4 py-2 text-sm font-medium md:px-3 md:py-1.5 ${
+                    className={`relative z-10 block rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 md:px-3 md:py-1.5 ${
                       isActive
                         ? "font-bold text-background"
                         : "text-white hover:text-secondary"

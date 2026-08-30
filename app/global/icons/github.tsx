@@ -1,4 +1,5 @@
-export default function GithubIcon({size=24, color="#ffffff", className=""}: IconProps = {}) {
+'use cache'
+export default async function GithubIcon({size=24, color="#ffffff", className=""}: IconProps = {}) {
     return (
         <>
         <svg fill={color} className={`w-[${size}px] h-[${size}px] ${className}`} viewBox="0 -0.5 25 25" xmlns="http://www.w3.org/2000/svg">
