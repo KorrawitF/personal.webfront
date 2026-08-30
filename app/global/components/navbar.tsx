@@ -15,32 +15,81 @@ const menus = [
 export default function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const navListRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef<Array<HTMLLIElement | null>>([]);
   const [pillStyle, setPillStyle] = useState({
+    left: "0px",
+    top: "0px",
     transform: "translate(0px, 0px)",
     width: "0px",
     height: "0px",
   });
 
   useEffect(() => {
-    const activeIndex = menus.findIndex((menu) =>
-      menu.href === "/" ? pathname === "/" : pathname.startsWith(menu.href),
-    );
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const handleViewportChange = () => setIsDesktop(mediaQuery.matches);
 
-    const activeItem = itemRefs.current[activeIndex];
-    const navList = navListRef.current;
+    handleViewportChange();
+    mediaQuery.addEventListener("change", handleViewportChange);
 
-    if (!activeItem || !navList) {
-      return;
+    return () => mediaQuery.removeEventListener("change", handleViewportChange);
+  }, []);
+
+  useEffect(() => {
+    const updatePillPosition = () => {
+      const activeIndex = menus.findIndex((menu) =>
+        menu.href === "/" ? pathname === "/" : pathname.startsWith(menu.href),
+      );
+
+      const activeItem = itemRefs.current[activeIndex];
+      const navList = navListRef.current;
+
+      if (!activeItem || !navList) {
+        return;
+      }
+
+      const navRect = navList.getBoundingClientRect();
+      const itemRect = activeItem.getBoundingClientRect();
+
+      setPillStyle({
+        left: "0px",
+        top: "0px",
+        transform: `translate(${itemRect.left - navRect.left}px, ${itemRect.top - navRect.top}px)`,
+        width: `${itemRect.width}px`,
+        height: `${itemRect.height}px`,
+      });
+    };
+
+    const scheduleUpdate = () => {
+      const frame = window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(updatePillPosition);
+      });
+
+      const timer = window.setTimeout(updatePillPosition, 40);
+      return () => {
+        window.cancelAnimationFrame(frame);
+        window.clearTimeout(timer);
+      };
+    };
+
+    const cleanup = scheduleUpdate();
+
+    const handleResize = () => scheduleUpdate();
+    window.addEventListener("resize", handleResize);
+
+    let resizeObserver: ResizeObserver | undefined;
+    if (typeof ResizeObserver !== "undefined" && navListRef.current) {
+      resizeObserver = new ResizeObserver(() => scheduleUpdate());
+      resizeObserver.observe(navListRef.current);
     }
 
-    setPillStyle({
-      transform: `translate(${activeItem.offsetLeft}px, ${activeItem.offsetTop}px)`,
-      width: `${activeItem.offsetWidth}px`,
-      height: `${activeItem.offsetHeight}px`,
-    });
-  }, [pathname, isMenuOpen]);
+    return () => {
+      cleanup();
+      window.removeEventListener("resize", handleResize);
+      resizeObserver?.disconnect();
+    };
+  }, [pathname, isMenuOpen, isDesktop]);
 
   return (
     <nav className="fixed left-0 right-0 top-0 z-20">
@@ -94,6 +143,8 @@ export default function Navbar() {
             <div
               className="pointer-events-none absolute z-0 rounded-full bg-primary shadow-[0_0_0_1px_rgba(255,255,255,0.08)] transition-[transform,width,height] duration-300 ease-out"
               style={{
+                left: pillStyle.left,
+                top: pillStyle.top,
                 transform: pillStyle.transform,
                 width: pillStyle.width,
                 height: pillStyle.height,
