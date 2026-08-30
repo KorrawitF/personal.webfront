@@ -28,7 +28,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-base text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-neutral-tertiary md:hidden"
+          className={`inline-flex h-10 w-10 items-center justify-center rounded-base text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-neutral-tertiary md:hidden transition-transform ${isMenuOpen && 'rotate-90'}`}
           aria-controls="navbar-menu"
           aria-expanded={isMenuOpen}
           aria-label={isMenuOpen ? "Close main menu" : "Open main menu"}
@@ -52,10 +52,18 @@ export default function Navbar() {
         </button>
 
         <div
-          className={`${isMenuOpen ? "block" : "hidden"} w-full md:block md:w-auto`}
+          className={`w-full overflow-hidden transition-all duration-300 ease-out md:block md:w-auto ${
+            isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 md:max-h-none md:opacity-100"
+          }`}
           id="navbar-menu"
         >
-          <ul className="transition-transform mt-4 flex flex-col gap-2 md:rounded-full md:border bg-background border-white/10 p-2 md:mt-0 md:flex-row md:items-center md:gap-1 border-0 md:p-0">
+          <ul
+            className={`mt-4 flex flex-col gap-2 border-0 bg-background p-2 transition-all duration-300 ease-out md:mt-0 md:flex-row md:items-center md:gap-1 md:rounded-full md:border md:border-white/10 md:p-0 ${
+              isMenuOpen
+                ? "translate-y-0 opacity-100"
+                : "-translate-y-2 opacity-0 md:translate-y-0 md:opacity-100"
+            }`}
+          >
             {menus.map((menu) => {
               const isActive = menu.href === "/" ? pathname === "/" : pathname.startsWith(menu.href);
 
