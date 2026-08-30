@@ -17,7 +17,7 @@ export default function Home() {
                 I'm a Software Engineer focused on building scalable systems, solving challenging problems, and turning ideas into software that works.
               </p>
             </div>
-            <div className="flex">
+            <div className="flex md:justify-start justify-center items-center">
               <Link href="">
                 <LinkedInIcon className="size-[24px] m-2" />
               </Link>
