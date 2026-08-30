@@ -1,15 +1,14 @@
 'use cache'
 
-import { ReactNode } from "react";
 import  Image  from "./image"
 
 export default async function TimeLine({className, items} : {className: string, items: TimeLineProps[]}) {
     return (
         <>
-            <ol className={`relative border-s border-default text-white ${className}`}>          
-                {items.map((item) => {
+            <ol className={`relative border-s border-default text-white ${className} ms-5`}>          
+                {items.map((item, idx) => {
                     return (
-                        <li className="mb-10 ms-6 w-full" key={item.id}>      
+                        <li className="mb-10 md:ms-6 ms-10 w-full" key={item.id}>      
                             {
                                 item.icon ?
                                     (<span className="absolute flex items-center justify-center w-8 h-8 bg-brand-softer rounded-full -start-4">
@@ -22,7 +21,10 @@ export default async function TimeLine({className, items} : {className: string, 
                                     )
                             }
                             <time className="bg-neutral-secondary-medium border border-default-medium text-heading text-xs font-medium px-1.5 py-0.5 rounded">{item.start_date} {item.end_date && '- ' + item.end_date}</time>
-                            <h3 className="flex justify-between items-center mb-1 text-lg font-semibold text-primary text-heading my-2">{item.title} <span className="text-secondary">{item.subtitle}</span></h3>
+                            <div className="flex md:flex-row flex-col flex-wrap justify-between">
+                                <h3 className="items-center md:mb-1 text-lg font-semibold text-primary text-heading md:my-2">{item.title}</h3>
+                                <h3 className="text-secondary mb-1 md:text-lg md:font-semibold text-primary md:text-heading md:my-2">{item.subtitle}</h3>
+                            </div>
                             <p className="mb-4 text-body">{item.detail}</p>
                         </li>
                     );
