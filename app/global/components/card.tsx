@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Card({children} : {children: React.ReactNode}) {
+export default function Card({children} : {children?: React.ReactNode}) {
     return (
         <> 
             {children}
