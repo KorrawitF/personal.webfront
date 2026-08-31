@@ -34,7 +34,7 @@ export default function About() {
                     <p>I enjoy solving complex problems, designing reliable systems, and turning ideas into practical software. I&rsquo;ve worked on ERP, warehouse management, banking integrations, and AI-powered automation across the full software development lifecycle.</p>
                 </div>
                 <TimeLine
-                    className="md:max-h-[70dvh] md:overflow-y-auto md:overscroll-contain [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] [scrollbar-width:thin]"
+                    className="md:max-h-[70dvh] md:overflow-y-auto md:overscroll-contain [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin"
                     items={timeline}
                 />
             </section>
