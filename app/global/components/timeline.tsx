@@ -2,34 +2,37 @@
 
 import  Image  from "./image"
 
-export default async function TimeLine({className, items} : {className: string, items: TimeLineProps[]}) {
+export default async function TimeLine({className = '', items} : TimeLineProps) {
     return (
-        <>
-            <ol className={`relative border-s border-default text-white ${className} ms-5`}>          
-                {items.map((item, idx) => {
+        <div className={`min-w-0 px-2 ${className}`}>
+            <ol className="relative ms-4 border-s border-white/15 text-white">
+                {items.map((item) => {
                     return (
-                        <li className="mb-10 md:ms-6 ms-10 w-full" key={item.id}>      
+                        <li className="relative ms-6 pb-10 last:pb-0 sm:ms-8" key={item.id}>
                             {
                                 item.icon ?
-                                    (<span className="absolute flex items-center justify-center w-8 h-8 bg-brand-softer rounded-full -start-4">
-                                        <Image className="rounded-full" src={item.icon} alt={item.subtitle} />
+                                    (<span className="absolute -start-11 top-0 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full sm:-start-13">
+                                        <Image className="h-full w-full object-contain p-1 rounded-full" src={item.icon} alt={item.subtitle ?? item.title} />
                                     </span>) :
                                     (
-                                        <span className="absolute flex items-center justify-center w-6 h-6 bg-primary ring-primary rounded-full -start-3 ring-4 ring-buffer">
-                                            <svg className="w-6 h-6 text-fg-brand-strong" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"/></svg>
+                                        <span className="absolute -start-10 top-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary ring-4 ring-background sm:-start-12">
+                                            <svg className="h-4 w-4 text-background" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"/></svg>
                                         </span>
                                     )
                             }
-                            <time className="bg-neutral-secondary-medium border border-default-medium text-heading text-xs font-medium px-1.5 py-0.5 rounded">{item.start_date} {item.end_date && '- ' + item.end_date}</time>
-                            <div className="flex md:flex-row flex-col flex-wrap justify-between">
-                                <h3 className="items-center md:mb-1 text-lg font-semibold text-primary text-heading md:my-2">{item.title}</h3>
-                                <h3 className="text-secondary mb-1 md:text-lg md:font-semibold text-primary md:text-heading md:my-2">{item.subtitle}</h3>
+                            <time className="inline-block rounded border border-white/15 bg-white/10 px-1.5 py-0.5 text-xs font-medium text-white/80">
+                                {item.start_date}{item.end_date && ` - ${item.end_date}`}
+                            </time>
+                            <div className="mt-2 flex flex-col gap-x-3 gap-y-0.5 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between">
+                                <h3 className="text-base font-semibold text-primary sm:text-lg">{item.title}</h3>
+                                {item.subtitle && <p className="text-sm text-secondary sm:text-base sm:font-medium">{item.subtitle}</p>}
                             </div>
-                            <p className="mb-4 text-body">{item.detail}</p>
+                            {item.detail && <p className="mt-2 text-sm break-words text-white/70 sm:text-base">{item.detail}</p>}
+                            {item.children && <div className="mt-3">{item.children}</div>}
                         </li>
                     );
-                })}        
+                })}
             </ol>
-        </>
+        </div>
     );
 }

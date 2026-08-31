@@ -21,15 +21,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} min-h-full antialiased`}
     >
       <body>
-        <Navbar />
-        <main className="flex flex-col px-1 absolute -z-10 inset-0 h-full w-full
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 -z-10
             bg-[linear-gradient(to_right,#73737320_1px,transparent_1px),linear-gradient(to_bottom,#73737320_1px,transparent_1px)]
             bg-[size:40px_40px]
             [mask-image:radial-gradient(ellipse_at_center,#000_70%,transparent_100%)]
-            [-webkit-mask-image:radial-gradient(ellipse_at_center,#000_70%,transparent_100%)]">
+            [-webkit-mask-image:radial-gradient(ellipse_at_center,#000_70%,transparent_100%)]"
+        />
+        <Navbar />
+        <main className="flex min-h-dvh flex-col px-1 pt-20">
           {children}
         </main>
       </body>
