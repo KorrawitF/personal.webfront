@@ -109,7 +109,7 @@ export default function Navbar() {
           : "border-transparent bg-transparent shadow-none"
       }`}
     >
-      <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4 2xl:w-1/2">
+      <div className="mx-auto flex max-w flex-wrap items-center justify-between p-4 2xl:w-1/2">
         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center whitespace-nowrap text-xl font-semibold text-white">
             <strong className="text-primary">K</strong>orrawit.
