@@ -16,6 +16,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const navListRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef<Array<HTMLLIElement | null>>([]);
   const [pillStyle, setPillStyle] = useState({
@@ -25,6 +26,15 @@ export default function Navbar() {
     width: "0px",
     height: "0px",
   });
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 0);
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
@@ -92,7 +102,13 @@ export default function Navbar() {
   }, [pathname, isMenuOpen, isDesktop]);
 
   return (
-    <nav className="fixed left-0 right-0 top-0 z-20">
+    <nav
+      className={`fixed left-0 right-0 top-0 z-20 border-b transition-colors duration-300 md:border-none md:bg-transparent md:shadow-none ${
+        isScrolled || isMenuOpen
+          ? "bg-background shadow-lg"
+          : "border-transparent bg-transparent shadow-none"
+      }`}
+    >
       <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4 2xl:w-1/2">
         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center whitespace-nowrap text-xl font-semibold text-white">
@@ -134,7 +150,11 @@ export default function Navbar() {
         >
           <ul
             ref={navListRef}
-            className={`relative mt-4 flex flex-col gap-2 border-0 bg-background p-2 transition-all duration-300 ease-out md:mt-0 md:flex-row md:items-center md:gap-1 md:rounded-full md:border md:border-white/10 md:p-0 ${
+            className={`relative mt-4 flex flex-col gap-2 border-0 p-2 transition-all duration-300 ease-out md:mt-0 md:flex-row md:items-center md:gap-1 md:rounded-full md:border md:p-0 ${
+              isScrolled || isMenuOpen
+                ? "bg-background md:border-white/10"
+                : "bg-transparent md:border-transparent"
+            } ${
               isMenuOpen
                 ? "translate-y-0 opacity-100"
                 : "-translate-y-2 opacity-0 md:translate-y-0 md:opacity-100"
