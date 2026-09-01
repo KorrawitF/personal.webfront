@@ -16,7 +16,6 @@ function initials(name: string): string {
         .toUpperCase();
 }
 
-/** An S-curve between two tiers, so branches read as cables rather than corners. */
 function path(edge: SkillEdge): string {
     const middle = (edge.from.y + edge.to.y) / 2;
 
