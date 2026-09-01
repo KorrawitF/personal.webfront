@@ -14,7 +14,7 @@ declare global {
         summary?: string,
         detail?: string,
         banner?: string,
-        icon?: string,
+        icon?: ReactNode,
         period?: string,
         status?: string,
         highlights?: string[],

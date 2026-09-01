@@ -62,8 +62,10 @@ function Header({ item, showStatus }: { item: CardDetail, showStatus: boolean })
     return (
         <div className="flex items-start gap-3">
             {item.icon && (
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white/10">
-                    <Image className="h-full w-full object-contain p-1" src={item.icon} alt={item.title} />
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white/10 text-white/80">
+                    {typeof item.icon === 'string'
+                        ? <Image className="h-full w-full object-contain p-1" src={item.icon} alt={item.title} />
+                        : item.icon}
                 </span>
             )}
             <div className="min-w-0 flex-1">
@@ -102,12 +104,13 @@ export default function Card({
     back,
 }: CardProps) {
     const [flipped, setFlipped] = useState(defaultFlipped);
+    const hasLinks = item.confidential || Boolean(item.links?.length);
 
     if (!flippable) {
         return (
             <article className={`flex flex-col overflow-hidden rounded-2xl border border-white/15 bg-white/5 shadow-lg shadow-black/30 backdrop-blur-sm ${className}`}>
                 <Banner item={item} />
-                <div className="flex flex-1 flex-col gap-3 p-5 text-white">
+                <div className="flex min-h-0 flex-1 flex-col gap-3 p-5 text-white">
                     <Header item={item} showStatus={!item.banner} />
                     {item.period && <p className="text-xs text-white/60">{item.period}</p>}
                     {item.summary && <p className="text-sm wrap-break-word text-white/70">{item.summary}</p>}
@@ -115,9 +118,11 @@ export default function Card({
                     <Highlights items={item.highlights ?? []} />
                     {children}
                     {back}
-                    <div className="mt-auto pt-2">
-                        <Links item={item} />
-                    </div>
+                    {hasLinks && (
+                        <div className="mt-auto pt-2">
+                            <Links item={item} />
+                        </div>
+                    )}
                 </div>
             </article>
         );
