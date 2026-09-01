@@ -25,7 +25,7 @@ function path(edge: SkillEdge): string {
 
 function Meter({ level, color }: { level: number, color: string }) {
     return (
-        <span className="flex items-center gap-[3px]" aria-hidden="true">
+        <span className="flex items-center gap-0.75" aria-hidden="true">
             {Array.from({ length: MAX_LEVEL }, (_, index) => (
                 <span
                     key={index}

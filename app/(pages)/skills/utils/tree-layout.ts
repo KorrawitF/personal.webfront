@@ -1,13 +1,10 @@
-/** Horizontal slot for one leaf, and the width every node label is allowed to use. */
 export const COLUMN = 128;
-/** Vertical distance between two tiers. */
 export const ROW = 116;
 export const ROOT_RADIUS = 26;
 export const NODE_RADIUS = 20;
 
 const PADDING_X = 12;
 const PADDING_TOP = ROOT_RADIUS + 8;
-/** Room under the root for the domain name and its point total. */
 const PADDING_BOTTOM = 74;
 
 function group(skills: Skill[]): { roots: Skill[], children: Map<string, Skill[]> } {
@@ -27,10 +24,6 @@ function group(skills: Skill[]): { roots: Skill[], children: Map<string, Skill[]
     return { roots, children };
 }
 
-/**
- * Places a domain on its own canvas: the root sits at the bottom and every tier
- * grows upwards, with a parent centred over the children it branches into.
- */
 export default function layoutSkillTree(domain: SkillDomain): SkillTreeLayout {
     const { roots, children } = group(domain.skills);
     const placed = new Map<string, { column: number, depth: number }>();

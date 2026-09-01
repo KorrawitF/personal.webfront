@@ -6,7 +6,6 @@ import SkillTree from "./skill-tree";
 
 const CANVAS = "min-h-0 overflow-auto rounded-2xl border border-white/10 bg-white/[0.03] p-4 [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin";
 
-/** The selected skill plus everything it branches from, so the whole path lights up. */
 function branch(domain: SkillDomain, skill: Skill): Set<string> {
     const byId = new Map(domain.skills.map((entry) => [entry.id, entry]));
     const ids = new Set<string>();
@@ -27,7 +26,6 @@ export default function SkillExplorer({ domains }: SkillExplorerProps) {
         [domains],
     );
 
-    // Opens on a concrete skill rather than a domain root, so the panel starts with something specific.
     const fallback = selections.find((entry) => entry.skill.parent && entry.skill.level === 5) ?? selections[0];
     const [selectedId, setSelectedId] = useState(fallback.skill.id);
     const selected = selections.find((entry) => entry.skill.id === selectedId) ?? fallback;
@@ -37,8 +35,6 @@ export default function SkillExplorer({ domains }: SkillExplorerProps) {
     const canvas = useRef<HTMLDivElement>(null);
     const detail = useRef<HTMLDivElement>(null);
 
-    // The trees are rooted at the bottom, so a canvas too short to show one whole
-    // should open on the roots and let the visitor scroll up into the branches.
     useEffect(() => {
         const pane = canvas.current;
 
@@ -50,7 +46,6 @@ export default function SkillExplorer({ domains }: SkillExplorerProps) {
     const select = (domain: SkillDomain, skill: Skill) => {
         setSelectedId(skill.id);
 
-        // On narrow screens the panel sits under the canvas, so bring it into view.
         if (window.matchMedia("(max-width: 1023px)").matches) {
             detail.current?.scrollIntoView({ behavior: "smooth", block: "start" });
         }
