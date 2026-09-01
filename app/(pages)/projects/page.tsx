@@ -58,13 +58,9 @@ function toCard(project: Project): CardDetail {
 const projects = getProjects().sort((a, b) => b.start_date.getTime() - a.start_date.getTime());
 
 export default function Projects() {
-    // The section is capped at the viewport minus the layout's pt-20 navbar offset.
-    // The cap lives here rather than on a wrapper because `min-h-dvh` on the shared
-    // <main> is only a minimum, and flex layout overrides `height` on a flex item --
-    // `max-height` is the one bound flex honours, so the grid below can shrink to fit.
     return (
         <div className="flex flex-1 flex-col items-center font-sans">
-            <section className="w-full max-w-6xl space-y-8 px-6 py-12 md:flex md:max-h-[calc(100dvh_-_5rem)] md:min-h-0 md:flex-1 md:flex-col md:overflow-hidden md:px-12 [@media(min-height:900px)]:py-24 2xl:max-w-5xl">
+            <section className="w-full max-w-6xl space-y-8 px-6 py-12 md:flex md:max-h-[calc(100dvh-5rem)] md:min-h-0 md:flex-1 md:flex-col md:overflow-hidden md:px-12 [@media(min-height:900px)]:py-24 2xl:max-w-5xl">
                 <header className="space-y-3 text-center text-balance text-white md:text-start">
                     <h1 className="text-2xl font-semibold sm:text-3xl">
                         <strong className="text-primary">P</strong>rojects

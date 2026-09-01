@@ -4,8 +4,6 @@ import { useState } from "react";
 import Image from "./image";
 import LockIcon from "../icons/lock";
 
-// No backdrop-blur here: a backdrop-filter on a backface-hidden element breaks
-// the 3D flip in Safari. The static (non-flippable) card keeps the blur.
 const FACE = "absolute inset-0 flex flex-col overflow-hidden rounded-2xl border border-white/15 bg-background/80 shadow-lg shadow-black/30 backface-hidden";
 const SCROLLER = "min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 [scrollbar-width:thin] [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent]";
 
