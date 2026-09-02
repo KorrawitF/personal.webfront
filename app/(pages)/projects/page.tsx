@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import Card from "@/app/global/components/card";
 import TechStack from "@/app/global/components/tech-stack";
 import ExternalLinkIcon from "@/app/global/icons/external-link";
 import GithubIcon from "@/app/global/icons/github";
 import { options } from "@/app/global/constants/DateFormat";
 import getProjects from "./api/mocks/projects";
+
+export const metadata: Metadata = {
+  title: "Projects",
+};
 
 function toPeriod(project: Project): string {
     const start = project.start_date.toLocaleDateString('en-US', options);

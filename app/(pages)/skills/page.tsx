@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import getSkillDomains from "./api/mocks/skills";
 import SkillExplorer from "./components/skill-explorer";
+
+export const metadata: Metadata = {
+  title: "Skills",
+};
 
 const domains = getSkillDomains();
 

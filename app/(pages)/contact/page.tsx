@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import GithubIcon from "@/app/global/icons/github";
 import LinkedInIcon from "@/app/global/icons/linkedin";
 import MailIcon from "@/app/global/icons/mail";
 import getContactMethods, { getResumeMail } from "./api/mocks/contact";
 import ContactMethods from "./components/contact-methods";
+
+export const metadata: Metadata = {
+  title: "Contact",
+};
 
 const icons: Record<string, ReactNode> = {
     email: <MailIcon className="h-5 w-5" />,

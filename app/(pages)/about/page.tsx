@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import TimeLine from "@/app/global/components/timeline";
 import getExperiences from "./api/mocks/about";
 import { options } from "@/app/global/constants/DateFormat";
+
+export const metadata: Metadata = {
+  title: "About",
+};
 
 const timeline : TimeLineItem[] = getExperiences().map((exp) => {
     return   {

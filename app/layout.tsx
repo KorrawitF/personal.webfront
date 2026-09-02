@@ -4,7 +4,10 @@ import Navbar from "./global/components/navbar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  'title': "Korrawit",
+  title: {
+    default: "Korrawit",
+    template: "Korrawit • %s",
+  },
 }
 
 const geistSans = Geist({
