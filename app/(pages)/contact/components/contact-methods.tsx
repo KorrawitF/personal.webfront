@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { startTransition, useState, ViewTransition } from "react";
 import type { ReactNode } from "react";
 import Card from "@/app/global/components/card";
 import MailContents from "./mail-contents";
@@ -25,6 +25,9 @@ export default function ContactMethods({ methods, mail, mail_copy, copy, form, c
     const fallback = methods.find((method) => method.status === 'available') ?? methods[0];
     const [activeId, setActiveId] = useState(fallback.id);
 
+    // As with the skill panel, the swap has to be async for the cross-fade to run.
+    const select = (id: string) => startTransition(() => setActiveId(id));
+
     const active = methods.find((method) => method.id === activeId) ?? fallback;
     const alternatives = methods.filter((method) => method.id !== active.id);
     const email = methods.find((method) => method.id === 'email');
@@ -34,34 +37,38 @@ export default function ContactMethods({ methods, mail, mail_copy, copy, form, c
     const fills = active.status === 'available';
 
     return (
-        <div className="grid grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-3 md:overflow-hidden">
+        <div className="stagger grid grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-3 md:overflow-hidden">
             <div id="contact-panel" className={`flex md:col-span-2 md:min-h-0 ${fills ? '' : 'md:items-start'}`}>
-                <Card item={toCard(active, copy.status[active.status], icons[active.id])} labels={card} flippable={false} className="w-full md:max-h-full">
-                    {active.status === 'available' ? (
-                        <ResumeForm copy={form} intro={<MailContents mail={mail} copy={mail_copy} />} />
-                    ) : (
-                        <div className="flex min-h-0 flex-1 flex-col gap-4">
-                            <div className={PANEL}>
-                                <p className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
-                                    {copy.pending_note}
-                                </p>
-                            </div>
-
-                            {email && (
-                                <div className="shrink-0 border-t border-white/10 pt-3">
-                                    <button
-                                        type="button"
-                                        onClick={() => setActiveId(email.id)}
-                                        aria-controls="contact-panel"
-                                        className="inline-flex items-center gap-2 rounded-full border border-primary bg-primary px-4 py-2 text-sm font-semibold text-background transition-colors hover:border-secondary hover:bg-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                                    >
-                                        {copy.use_email}
-                                    </button>
+                {/* Keyed, so switching method reads as one panel leaving and
+                    another arriving rather than an in-place content jump. */}
+                <ViewTransition key={active.id} name="contact-panel" share="swap" default="none">
+                    <Card item={toCard(active, copy.status[active.status], icons[active.id])} labels={card} flippable={false} className="w-full md:max-h-full">
+                        {active.status === 'available' ? (
+                            <ResumeForm copy={form} intro={<MailContents mail={mail} copy={mail_copy} />} />
+                        ) : (
+                            <div className="flex min-h-0 flex-1 flex-col gap-4">
+                                <div className={PANEL}>
+                                    <p className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
+                                        {copy.pending_note}
+                                    </p>
                                 </div>
-                            )}
-                        </div>
-                    )}
-                </Card>
+
+                                {email && (
+                                    <div className="shrink-0 border-t border-white/10 pt-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => select(email.id)}
+                                            aria-controls="contact-panel"
+                                            className="inline-flex items-center gap-2 rounded-full border border-primary bg-primary px-4 py-2 text-sm font-semibold text-background transition-colors hover:border-secondary hover:bg-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                                        >
+                                            {copy.use_email}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </Card>
+                </ViewTransition>
             </div>
 
             <div className="flex flex-col gap-3 md:min-h-0 md:overflow-y-auto md:overscroll-contain md:pr-1 [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin">
@@ -72,7 +79,7 @@ export default function ContactMethods({ methods, mail, mail_copy, copy, form, c
                         <li key={method.id}>
                             <button
                                 type="button"
-                                onClick={() => setActiveId(method.id)}
+                                onClick={() => select(method.id)}
                                 aria-controls="contact-panel"
                                 className="w-full rounded-2xl border border-white/15 bg-white/5 p-4 text-left shadow-lg shadow-black/20 transition-colors hover:border-primary hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                             >

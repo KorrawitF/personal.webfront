@@ -5,6 +5,7 @@ import TimeLine from "@/app/global/components/timeline";
 import getSiteContent from "@/app/global/api/mocks/site";
 import { options } from "@/app/global/constants/DateFormat";
 import fill from "@/app/global/utils/format";
+import PageTransition from "@/app/global/components/page-transition";
 import { getAboutContent } from "./api/mocks/about";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -43,9 +44,9 @@ export default async function About() {
     const toolkit = [...new Set(content.experiences.flatMap((exp) => exp.tech_stack ?? []))];
 
     return (
-        <div className="flex flex-1 flex-col items-center font-sans">
+        <PageTransition>
             <section className="w-full max-w-6xl space-y-8 px-6 py-12 md:flex md:max-h-[calc(100dvh-5rem)] md:min-h-0 md:flex-1 md:flex-col md:overflow-hidden md:px-12 [@media(min-height:900px)]:py-16 2xl:max-w-5xl">
-                <header className="shrink-0 space-y-3 text-center text-balance text-white md:text-start">
+                <header className="reveal shrink-0 space-y-3 text-center text-balance text-white md:text-start">
                     <h1 className="text-2xl font-semibold sm:text-3xl">
                         <strong className="text-primary">{content.header.title.charAt(0)}</strong>
                         {content.header.title.slice(1)}
@@ -54,7 +55,7 @@ export default async function About() {
                 </header>
 
                 <div className="grid grid-cols-1 gap-8 md:min-h-0 md:flex-1 md:grid-cols-5">
-                    <div className="relative flex min-h-0 flex-col md:col-span-2">
+                    <div className="reveal relative flex min-h-0 flex-col md:col-span-2">
                         <div className={`${PANE} space-y-5 md:flex-1 md:pb-6 md:pr-2`}>
                             <div className="flex items-center gap-4 rounded-2xl border border-white/15 bg-white/5 p-4">
                                 <span className="flex h-16 w-16 shrink-0 overflow-hidden rounded-full ring-2 ring-primary/60">
@@ -93,7 +94,7 @@ export default async function About() {
                     </div>
 
                     <div className="flex min-h-0 flex-col gap-3 md:col-span-3">
-                        <div className="flex shrink-0 items-baseline justify-between gap-3 border-b border-white/10 pb-2">
+                        <div className="reveal flex shrink-0 items-baseline justify-between gap-3 border-b border-white/10 pb-2">
                             <h2 className="text-sm font-semibold uppercase tracking-wide text-white/50">
                                 {content.experience_label}
                             </h2>
@@ -112,6 +113,6 @@ export default async function About() {
                     </div>
                 </div>
             </section>
-        </div>
+        </PageTransition>
     );
 }

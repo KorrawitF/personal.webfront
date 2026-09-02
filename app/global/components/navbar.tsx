@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import TransitionLink from "./transition-link";
 
 const menus = [
   { name: "Home", href: "/" },
@@ -103,6 +103,7 @@ export default function Navbar({ brand, open_menu, close_menu }: NavbarProps) {
 
   return (
     <nav
+      style={{ viewTransitionName: 'site-header' }}
       className={`fixed left-0 right-0 top-0 z-20 border-b transition-colors duration-300 md:border-none md:bg-transparent md:shadow-none ${
         isScrolled || isMenuOpen
           ? "bg-background shadow-lg"
@@ -110,11 +111,11 @@ export default function Navbar({ brand, open_menu, close_menu }: NavbarProps) {
       }`}
     >
       <div className="mx-auto flex max-w flex-wrap items-center justify-between p-4 2xl:w-1/2">
-        <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+        <TransitionLink href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center whitespace-nowrap text-xl font-semibold text-white">
             <strong className="text-primary">{brand.charAt(0)}</strong>{brand.slice(1)}
           </span>
-        </Link>
+        </TransitionLink>
 
         <button
           type="button"
@@ -182,7 +183,7 @@ export default function Navbar({ brand, open_menu, close_menu }: NavbarProps) {
                   }}
                   className="relative z-10 flex-1 grow text-center"
                 >
-                  <Link
+                  <TransitionLink
                     href={menu.href}
                     onClick={() => setIsMenuOpen(false)}
                     className={`relative z-10 block rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 md:px-3 md:py-1.5 ${
@@ -192,7 +193,7 @@ export default function Navbar({ brand, open_menu, close_menu }: NavbarProps) {
                     }`}
                   >
                     {menu.name}
-                  </Link>
+                  </TransitionLink>
                 </li>
               );
             })}

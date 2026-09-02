@@ -1,9 +1,10 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
 import Image from "@/app/global/components/image";
 import GithubIcon from "@/app/global/icons/github";
 import LinkedInIcon from "@/app/global/icons/linkedin";
 import MailIcon from "@/app/global/icons/mail";
+import PageTransition from "@/app/global/components/page-transition";
+import TransitionLink from "@/app/global/components/transition-link";
 import getHomeContent from "./api/mocks/home";
 
 const icons: Record<string, ReactNode> = {
@@ -16,9 +17,9 @@ export default async function Home() {
     const content = await getHomeContent();
 
     return (
-        <div className="flex flex-1 flex-col items-center font-sans">
+        <PageTransition>
             <section className="grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-6 py-12 md:min-h-0 md:flex-1 md:grid-cols-5 md:gap-12 md:px-12 [@media(min-height:900px)]:py-24 2xl:max-w-5xl">
-                <div className="order-2 flex flex-col items-center gap-6 text-center md:order-1 md:col-span-3 md:items-start md:text-start">
+                <div className="stagger order-2 flex flex-col items-center gap-6 text-center md:order-1 md:col-span-3 md:items-start md:text-start">
                     <p className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium uppercase tracking-wide text-secondary">
                         {content.eyebrow}
                     </p>
@@ -32,7 +33,7 @@ export default async function Home() {
 
                     <div className="flex flex-wrap items-center justify-center gap-3 md:justify-start">
                         {content.actions.map((action, index) => (
-                            <Link
+                            <TransitionLink
                                 key={action.href}
                                 href={action.href}
                                 className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
@@ -42,7 +43,7 @@ export default async function Home() {
                                 }`}
                             >
                                 {action.label}
-                            </Link>
+                            </TransitionLink>
                         ))}
                     </div>
 
@@ -63,7 +64,7 @@ export default async function Home() {
                     </ul>
                 </div>
 
-                <div className="order-1 mx-auto w-40 max-w-full sm:w-56 md:order-2 md:col-span-2 md:w-full">
+                <div className="reveal order-1 mx-auto w-40 max-w-full sm:w-56 md:order-2 md:col-span-2 md:w-full">
                     <div className="relative">
                         <div aria-hidden="true" className="absolute -inset-6 rounded-full bg-primary/15 blur-3xl" />
                         <div className="relative aspect-square overflow-hidden rounded-full border border-white/15 bg-white/5 shadow-lg shadow-black/40 md:rounded-3xl">
@@ -72,6 +73,6 @@ export default async function Home() {
                     </div>
                 </div>
             </section>
-        </div>
+        </PageTransition>
     );
 }

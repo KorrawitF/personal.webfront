@@ -5,6 +5,7 @@ import ExternalLinkIcon from "@/app/global/icons/external-link";
 import GithubIcon from "@/app/global/icons/github";
 import getSiteContent from "@/app/global/api/mocks/site";
 import { options } from "@/app/global/constants/DateFormat";
+import PageTransition from "@/app/global/components/page-transition";
 import { getProjectsContent } from "./api/mocks/projects";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -67,9 +68,9 @@ export default async function Projects() {
     const [content, site] = await Promise.all([getProjectsContent(), getSiteContent()]);
 
     return (
-        <div className="flex flex-1 flex-col items-center font-sans">
+        <PageTransition>
             <section className="w-full max-w-6xl space-y-8 px-6 py-12 md:flex md:max-h-[calc(100dvh-5rem)] md:min-h-0 md:flex-1 md:flex-col md:overflow-hidden md:px-12 [@media(min-height:900px)]:py-24 2xl:max-w-5xl">
-                <header className="space-y-3 text-center text-balance text-white md:text-start">
+                <header className="reveal space-y-3 text-center text-balance text-white md:text-start">
                     <h1 className="text-2xl font-semibold sm:text-3xl">
                         <strong className="text-primary">{content.header.title.charAt(0)}</strong>
                         {content.header.title.slice(1)}
@@ -77,7 +78,7 @@ export default async function Projects() {
                     <p className="text-white/70">{content.header.lead}</p>
                 </header>
 
-                <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:min-h-0 md:flex-1 md:overflow-y-auto md:overscroll-contain md:pr-2 lg:grid-cols-3 [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin">
+                <ul className="stagger grid grid-cols-1 gap-6 sm:grid-cols-2 md:min-h-0 md:flex-1 md:overflow-y-auto md:overscroll-contain md:pr-2 lg:grid-cols-3 [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin">
                     {content.projects.map((project) => (
                         <li key={project.id}>
                             <Card
@@ -92,6 +93,6 @@ export default async function Projects() {
                     ))}
                 </ul>
             </section>
-        </div>
+        </PageTransition>
     );
 }

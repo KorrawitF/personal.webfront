@@ -5,7 +5,7 @@ import  Image  from "./image"
 export default async function TimeLine({className = '', items} : TimeLineProps) {
     return (
         <div className={`min-w-0 px-2 ${className}`}>
-            <ol className="relative ms-4 border-s-2 border-white/35 text-white">
+            <ol className="stagger relative ms-4 border-s-2 border-white/35 text-white">
                 {items.map((item) => {
                     return (
                         <li className="relative ms-6 pb-10 last:pb-0 sm:ms-8" key={item.id}>

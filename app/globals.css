@@ -31,3 +31,142 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ---------------------------------------------------------------------------
+   Motion
+
+   Two layers. Page-level entry and exit run through the View Transitions API,
+   so the slide happens in the browser's overlay and never widens the document
+   — the panes below still own every scrollbar. Inside a page, `reveal` and
+   `stagger` settle the content in with plain keyframes, no JavaScript.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Old content leaves quickly so it stops competing for attention; new
+     content arrives more slowly, and waits for the exit before it fades up. */
+  --duration-exit: 140ms;
+  --duration-enter: 220ms;
+  --duration-move: 380ms;
+  --duration-reveal: 420ms;
+  --stagger-step: 45ms;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-x {
+  from { translate: var(--slide-offset, 0) 0; }
+  to { translate: 0 0; }
+}
+
+@keyframes rise-y {
+  from { translate: 0 10px; }
+  to { translate: 0 0; }
+}
+
+@keyframes rise {
+  from { opacity: 0; translate: 0 10px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+/* Clicks during a transition should reach the live page, not the overlay. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* Directional page moves. Far enough to read as a direction, short enough that
+   the eye does not have to track the page across the viewport. */
+::view-transition-old(.nav-forward) {
+  --slide-offset: -64px;
+  animation:
+    var(--duration-exit) ease-in both fade reverse,
+    var(--duration-move) var(--ease-in-out) both slide-x reverse;
+}
+
+::view-transition-new(.nav-forward) {
+  --slide-offset: 64px;
+  animation:
+    var(--duration-enter) ease-out var(--duration-exit) both fade,
+    var(--duration-move) var(--ease-in-out) both slide-x;
+}
+
+::view-transition-old(.nav-back) {
+  --slide-offset: 64px;
+  animation:
+    var(--duration-exit) ease-in both fade reverse,
+    var(--duration-move) var(--ease-in-out) both slide-x reverse;
+}
+
+::view-transition-new(.nav-back) {
+  --slide-offset: -64px;
+  animation:
+    var(--duration-enter) ease-out var(--duration-exit) both fade,
+    var(--duration-move) var(--ease-in-out) both slide-x;
+}
+
+/* Swapping content in place — a crossfade says "same place, different thing",
+   where a slide would wrongly say "somewhere else". */
+::view-transition-old(.swap) {
+  animation: var(--duration-exit) ease-in both fade reverse;
+}
+
+::view-transition-new(.swap) {
+  animation:
+    var(--duration-enter) ease-out var(--duration-exit) both fade,
+    var(--duration-move) var(--ease-out) both rise-y;
+}
+
+/* The navbar is the one fixed point the slide is measured against, so it holds
+   still and stays on top. Hiding the old snapshot avoids a double-nav flash,
+   and leaving the new one live lets the active pill glide across on its own. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+
+::view-transition-old(site-header) {
+  display: none;
+}
+
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+.reveal {
+  animation: rise var(--duration-reveal) var(--ease-out) both;
+}
+
+/* Children rise in sequence. Anything past the eighth shares the last beat,
+   so a long list still finishes on time. */
+.stagger > * {
+  animation: rise var(--duration-reveal) var(--ease-out) both;
+  animation-delay: calc(var(--stagger-step) * 7);
+}
+
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: calc(var(--stagger-step) * 1); }
+.stagger > *:nth-child(3) { animation-delay: calc(var(--stagger-step) * 2); }
+.stagger > *:nth-child(4) { animation-delay: calc(var(--stagger-step) * 3); }
+.stagger > *:nth-child(5) { animation-delay: calc(var(--stagger-step) * 4); }
+.stagger > *:nth-child(6) { animation-delay: calc(var(--stagger-step) * 5); }
+.stagger > *:nth-child(7) { animation-delay: calc(var(--stagger-step) * 6); }
+
+/* Sliding a whole page across the viewport is the motion most likely to make
+   someone ill, so drop straight to the swap the browser would do unaided. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+
+  .reveal,
+  .stagger > * {
+    animation: none !important;
+  }
+}

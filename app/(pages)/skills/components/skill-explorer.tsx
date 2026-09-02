@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { startTransition, useEffect, useMemo, useRef, useState, ViewTransition } from "react";
 import SkillDetail from "./skill-detail";
 import SkillTree from "./skill-tree";
 
@@ -43,8 +43,10 @@ export default function SkillExplorer({ domains, labels, tech_stack }: SkillExpl
         }
     }, []);
 
+    // A view transition only rides along with an async update, so the selection
+    // goes through startTransition to give the detail panel something to cross-fade.
     const select = (domain: SkillDomain, skill: Skill) => {
-        setSelectedId(skill.id);
+        startTransition(() => setSelectedId(skill.id));
 
         if (window.matchMedia("(max-width: 1023px)").matches) {
             detail.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -52,12 +54,12 @@ export default function SkillExplorer({ domains, labels, tech_stack }: SkillExpl
     };
 
     const focusDomain = (domain: SkillDomain) => {
-        setSelectedId(domain.skills[0].id);
+        startTransition(() => setSelectedId(domain.skills[0].id));
         trees.current.get(domain.id)?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
     };
 
     return (
-        <div className="flex min-h-0 flex-col gap-4 lg:flex-1 lg:overflow-hidden">
+        <div className="stagger flex min-h-0 flex-col gap-4 lg:flex-1 lg:overflow-hidden">
             <ul className="flex shrink-0 flex-wrap gap-2">
                 {domains.map((domain) => {
                     const active = domain.id === selected.domain.id;
@@ -103,13 +105,17 @@ export default function SkillExplorer({ domains, labels, tech_stack }: SkillExpl
                 </div>
 
                 <div ref={detail} className="flex min-h-0 scroll-mt-20">
-                    <SkillDetail
-                        domain={selected.domain}
-                        skill={selected.skill}
-                        labels={labels}
-                        tech_stack={tech_stack}
-                        className="w-full lg:min-h-0"
-                    />
+                    {/* Keyed, so React reads a new selection as an exit and an enter
+                        pair and `share` can cross-fade between the two panels. */}
+                    <ViewTransition key={selectedId} name="skill-detail" share="swap" default="none">
+                        <SkillDetail
+                            domain={selected.domain}
+                            skill={selected.skill}
+                            labels={labels}
+                            tech_stack={tech_stack}
+                            className="w-full lg:min-h-0"
+                        />
+                    </ViewTransition>
                 </div>
             </div>
         </div>
