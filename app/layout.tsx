@@ -1,13 +1,18 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./global/components/navbar";
+import getSiteContent from "./global/api/mocks/site";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: {
-    default: "Korrawit",
-    template: "Korrawit • %s",
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getSiteContent();
+
+  return {
+    title: {
+      default: site.title.default,
+      template: site.title.template,
+    },
+  };
 }
 
 const geistSans = Geist({
@@ -20,7 +25,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const site = await getSiteContent();
+
   return (
     <html
       lang="en"
@@ -35,7 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             mask-[radial-gradient(ellipse_at_center,#000_70%,transparent_100%)]
             [-webkit-mask-image:radial-gradient(ellipse_at_center,#000_70%,transparent_100%)]"
         />
-        <Navbar />
+        <Navbar brand={site.brand} open_menu={site.open_menu} close_menu={site.close_menu} />
         <main className="flex min-h-dvh flex-col px-1 pt-20">
           {children}
         </main>

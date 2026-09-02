@@ -20,7 +20,7 @@ function branch(domain: SkillDomain, skill: Skill): Set<string> {
     return ids;
 }
 
-export default function SkillExplorer({ domains }: SkillExplorerProps) {
+export default function SkillExplorer({ domains, labels, tech_stack }: SkillExplorerProps) {
     const selections = useMemo<SkillSelection[]>(
         () => domains.flatMap((domain) => domain.skills.map((skill) => ({ domain, skill }))),
         [domains],
@@ -106,6 +106,8 @@ export default function SkillExplorer({ domains }: SkillExplorerProps) {
                     <SkillDetail
                         domain={selected.domain}
                         skill={selected.skill}
+                        labels={labels}
+                        tech_stack={tech_stack}
                         className="w-full lg:min-h-0"
                     />
                 </div>

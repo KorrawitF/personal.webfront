@@ -4,20 +4,11 @@ import TechStack from "@/app/global/components/tech-stack";
 const MAX_LEVEL = 5;
 const SCROLLER = "min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain pr-1 [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin";
 
-const LEVELS = [
-    'On the roadmap',
-    'Familiar',
-    'Working knowledge',
-    'Proficient',
-    'Advanced',
-    'Daily driver',
-];
-
 function Heading({ children }: { children: string }) {
     return <h3 className="text-xs font-semibold uppercase tracking-wide text-white/50">{children}</h3>;
 }
 
-export default function SkillDetail({ domain, skill, className = '' }: SkillDetailProps) {
+export default function SkillDetail({ domain, skill, labels, tech_stack, className = '' }: SkillDetailProps) {
     const locked = skill.level === 0;
 
     return (
@@ -61,7 +52,7 @@ export default function SkillDetail({ domain, skill, className = '' }: SkillDeta
                         ))}
                     </span>
                     <span className="text-sm text-white/70">
-                        {LEVELS[skill.level] ?? LEVELS[0]}
+                        {labels.levels[skill.level] ?? labels.levels[0]}
                         <span className="text-white/40"> &middot; {skill.level}/{MAX_LEVEL}</span>
                     </span>
                 </div>
@@ -70,11 +61,11 @@ export default function SkillDetail({ domain, skill, className = '' }: SkillDeta
             <div className={SCROLLER}>
                 <p className="text-sm wrap-break-word text-white/75">{skill.summary}</p>
 
-                <TechStack items={skill.tools} label="Tools" />
+                <TechStack items={skill.tools} label={labels.tools} labels={tech_stack} />
 
                 {skill.use_cases.length > 0 && (
                     <section className="space-y-1.5">
-                        <Heading>Use cases</Heading>
+                        <Heading>{labels.use_cases}</Heading>
                         <ul className="ms-4 list-disc space-y-1 text-sm text-white/70 marker:text-primary">
                             {skill.use_cases.map((useCase) => (
                                 <li key={useCase} className="wrap-break-word">{useCase}</li>
@@ -84,7 +75,7 @@ export default function SkillDetail({ domain, skill, className = '' }: SkillDeta
                 )}
 
                 <section className="space-y-2">
-                    <Heading>Experience</Heading>
+                    <Heading>{labels.experience}</Heading>
                     {skill.experiences.length ? (
                         <ol className="space-y-3">
                             {skill.experiences.map((experience) => (
@@ -102,9 +93,7 @@ export default function SkillDetail({ domain, skill, className = '' }: SkillDeta
                             ))}
                         </ol>
                     ) : (
-                        <p className="text-sm text-white/50">
-                            Nothing shipped with this yet &mdash; it is on the list, not on my CV.
-                        </p>
+                        <p className="text-sm text-white/50">{labels.no_experience}</p>
                     )}
                 </section>
             </div>

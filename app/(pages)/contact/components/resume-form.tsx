@@ -10,18 +10,19 @@ const SCROLLER = "min-h-0 space-y-4 md:flex-1 md:overflow-y-auto md:overscroll-c
 const FIELD = "w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white transition-colors placeholder:text-white/30 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60";
 const LABEL = "block text-xs font-semibold uppercase tracking-wide text-white/50";
 
-function Field({ id, label, optional = false, error, children }: {
+function Field({ id, field, optional, error, children }: {
     id: string,
-    label: string,
-    optional?: boolean,
+    field: FormField,
+    /** The word marking a field as not required, when it is not. */
+    optional?: string,
     error?: string,
     children: ReactNode,
 }) {
     return (
         <div className="space-y-1.5">
             <label htmlFor={id} className={LABEL}>
-                {label}
-                {optional && <span className="ms-1 font-normal normal-case tracking-normal text-white/30">optional</span>}
+                {field.label}
+                {optional && <span className="ms-1 font-normal normal-case tracking-normal text-white/30">{optional}</span>}
             </label>
             {children}
             {error && <p id={`${id}-error`} className="text-xs text-red-300">{error}</p>}
@@ -29,7 +30,7 @@ function Field({ id, label, optional = false, error, children }: {
     );
 }
 
-export default function ResumeForm({ intro }: { intro?: ReactNode }) {
+export default function ResumeForm({ copy, intro }: { copy: ResumeFormCopy, intro?: ReactNode }) {
     const [state, formAction, pending] = useActionState(requestResume, INITIAL_STATE);
     const values = state.values;
     const errors = state.errors;
@@ -40,7 +41,7 @@ export default function ResumeForm({ intro }: { intro?: ReactNode }) {
                 {intro}
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <Field id="name" label="Your name" error={errors?.name}>
+                    <Field id="name" field={copy.fields.name} error={errors?.name}>
                         <input
                             id="name"
                             name="name"
@@ -50,12 +51,12 @@ export default function ResumeForm({ intro }: { intro?: ReactNode }) {
                             defaultValue={values?.name}
                             aria-invalid={Boolean(errors?.name)}
                             aria-describedby={errors?.name ? 'name-error' : undefined}
-                            placeholder="Jane Doe"
+                            placeholder={copy.fields.name.placeholder}
                             className={FIELD}
                         />
                     </Field>
 
-                    <Field id="email" label="Email" error={errors?.email}>
+                    <Field id="email" field={copy.fields.email} error={errors?.email}>
                         <input
                             id="email"
                             name="email"
@@ -65,36 +66,36 @@ export default function ResumeForm({ intro }: { intro?: ReactNode }) {
                             defaultValue={values?.email}
                             aria-invalid={Boolean(errors?.email)}
                             aria-describedby={errors?.email ? 'email-error' : undefined}
-                            placeholder="jane@company.com"
+                            placeholder={copy.fields.email.placeholder}
                             className={FIELD}
                         />
                     </Field>
 
-                    <Field id="company" label="Company" optional>
+                    <Field id="company" field={copy.fields.company} optional={copy.optional}>
                         <input
                             id="company"
                             name="company"
                             type="text"
                             autoComplete="organization"
                             defaultValue={values?.company}
-                            placeholder="Where you are writing from"
+                            placeholder={copy.fields.company.placeholder}
                             className={FIELD}
                         />
                     </Field>
 
-                    <Field id="role" label="Role you are hiring for" optional>
+                    <Field id="role" field={copy.fields.role} optional={copy.optional}>
                         <input
                             id="role"
                             name="role"
                             type="text"
                             defaultValue={values?.role}
-                            placeholder="Backend Engineer"
+                            placeholder={copy.fields.role.placeholder}
                             className={FIELD}
                         />
                     </Field>
                 </div>
 
-                <Field id="message" label="Anything I should know" optional error={errors?.message}>
+                <Field id="message" field={copy.fields.message} optional={copy.optional} error={errors?.message}>
                     <textarea
                         id="message"
                         name="message"
@@ -103,7 +104,7 @@ export default function ResumeForm({ intro }: { intro?: ReactNode }) {
                         defaultValue={values?.message}
                         aria-invalid={Boolean(errors?.message)}
                         aria-describedby={errors?.message ? 'message-error' : undefined}
-                        placeholder="A line about the role, the team or the timeline."
+                        placeholder={copy.fields.message.placeholder}
                         className={`${FIELD} resize-y`}
                     />
                 </Field>
@@ -121,9 +122,9 @@ export default function ResumeForm({ intro }: { intro?: ReactNode }) {
                                 <path d="M12 3a9 9 0 1 0 9 9" />
                             </svg>
                         )}
-                        {pending ? 'Sending…' : 'Send me the résumé'}
+                        {pending ? copy.sending : copy.submit}
                     </button>
-                    <p className="text-xs text-white/40">Your address is used for this one mail &mdash; nothing else.</p>
+                    <p className="text-xs text-white/40">{copy.note}</p>
                 </div>
 
                 <div aria-live="polite">

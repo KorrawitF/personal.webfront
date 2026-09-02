@@ -63,6 +63,8 @@ declare global {
 
     type SkillExplorerProps = {
         domains: SkillDomain[],
+        labels: SkillDetailLabels,
+        tech_stack: TechStackLabels,
     }
 
     type SkillTreeProps = {
@@ -76,6 +78,8 @@ declare global {
     type SkillDetailProps = {
         domain: SkillDomain,
         skill: Skill,
+        labels: SkillDetailLabels,
+        tech_stack: TechStackLabels,
         className?: string,
     }
 }

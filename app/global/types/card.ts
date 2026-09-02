@@ -24,6 +24,7 @@ declare global {
 
     type CardProps = {
         item: CardDetail,
+        labels: CardLabels,
         flippable?: boolean,
         defaultFlipped?: boolean,
         className?: string,

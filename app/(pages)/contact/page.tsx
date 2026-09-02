@@ -3,12 +3,15 @@ import type { ReactNode } from "react";
 import GithubIcon from "@/app/global/icons/github";
 import LinkedInIcon from "@/app/global/icons/linkedin";
 import MailIcon from "@/app/global/icons/mail";
-import getContactMethods, { getResumeMail } from "./api/mocks/contact";
+import getSiteContent from "@/app/global/api/mocks/site";
+import { getContactContent } from "./api/mocks/contact";
 import ContactMethods from "./components/contact-methods";
 
-export const metadata: Metadata = {
-  title: "Contact",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const content = await getContactContent();
+
+    return { title: content.header.title };
+}
 
 const icons: Record<string, ReactNode> = {
     email: <MailIcon className="h-5 w-5" />,
@@ -16,25 +19,29 @@ const icons: Record<string, ReactNode> = {
     github: <GithubIcon className="h-5 w-5" color="currentColor" />,
 };
 
-const methods = getContactMethods();
-const mail = getResumeMail();
+export default async function Contact() {
+    const [content, site] = await Promise.all([getContactContent(), getSiteContent()]);
 
-export default function Contact() {
     return (
         <div className="flex flex-1 flex-col items-center font-sans">
             <section className="w-full max-w-6xl space-y-8 px-6 py-12 md:flex md:max-h-[calc(100dvh-5rem)] md:min-h-0 md:flex-1 md:flex-col md:overflow-hidden md:px-12 [@media(min-height:900px)]:py-16 2xl:max-w-5xl">
                 <header className="space-y-3 text-center text-balance text-white md:text-start">
                     <h1 className="text-2xl font-semibold sm:text-3xl">
-                        <strong className="text-primary">C</strong>ontact
+                        <strong className="text-primary">{content.header.title.charAt(0)}</strong>
+                        {content.header.title.slice(1)}
                     </h1>
-                    <p className="text-white/70">
-                        The quickest route is email &mdash; tell me where to send things and my résumé arrives in your
-                        inbox with my own contact details attached, so you can reply straight back.
-                        Pick another channel on the right to switch to it.
-                    </p>
+                    <p className="text-white/70">{content.header.lead}</p>
                 </header>
 
-                <ContactMethods methods={methods} mail={mail} icons={icons} />
+                <ContactMethods
+                    methods={content.methods}
+                    mail={content.mail}
+                    mail_copy={content.mail_copy}
+                    copy={content.methods_copy}
+                    form={content.form}
+                    card={site.card}
+                    icons={icons}
+                />
             </section>
         </div>
     );

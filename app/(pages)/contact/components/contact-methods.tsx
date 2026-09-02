@@ -9,11 +9,7 @@ import ResumeForm from "./resume-form";
 const PANEL = "min-h-0 space-y-4 md:flex-1 md:overflow-y-auto md:overscroll-contain md:pr-1 [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin";
 const PILL = "shrink-0 rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 text-xs font-medium text-secondary";
 
-function label(method: ContactMethod): string {
-    return method.status === 'available' ? 'Open' : 'Pending';
-}
-
-function toCard(method: ContactMethod, icon?: ReactNode): CardDetail {
+function toCard(method: ContactMethod, status: string, icon?: ReactNode): CardDetail {
     return {
         id: method.id,
         title: method.name,
@@ -21,11 +17,11 @@ function toCard(method: ContactMethod, icon?: ReactNode): CardDetail {
         summary: method.summary,
         detail: method.detail,
         icon,
-        status: label(method),
+        status,
     };
 }
 
-export default function ContactMethods({ methods, mail, icons }: ContactMethodsProps) {
+export default function ContactMethods({ methods, mail, mail_copy, copy, form, card, icons }: ContactMethodsProps) {
     const fallback = methods.find((method) => method.status === 'available') ?? methods[0];
     const [activeId, setActiveId] = useState(fallback.id);
 
@@ -40,15 +36,14 @@ export default function ContactMethods({ methods, mail, icons }: ContactMethodsP
     return (
         <div className="grid grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-3 md:overflow-hidden">
             <div id="contact-panel" className={`flex md:col-span-2 md:min-h-0 ${fills ? '' : 'md:items-start'}`}>
-                <Card item={toCard(active, icons[active.id])} flippable={false} className="w-full md:max-h-full">
+                <Card item={toCard(active, copy.status[active.status], icons[active.id])} labels={card} flippable={false} className="w-full md:max-h-full">
                     {active.status === 'available' ? (
-                        <ResumeForm intro={<MailContents mail={mail} />} />
+                        <ResumeForm copy={form} intro={<MailContents mail={mail} copy={mail_copy} />} />
                     ) : (
                         <div className="flex min-h-0 flex-1 flex-col gap-4">
                             <div className={PANEL}>
                                 <p className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
-                                    There is no form for this channel yet &mdash; it is still being wired up.
-                                    Email is the one that reaches me today.
+                                    {copy.pending_note}
                                 </p>
                             </div>
 
@@ -60,7 +55,7 @@ export default function ContactMethods({ methods, mail, icons }: ContactMethodsP
                                         aria-controls="contact-panel"
                                         className="inline-flex items-center gap-2 rounded-full border border-primary bg-primary px-4 py-2 text-sm font-semibold text-background transition-colors hover:border-secondary hover:bg-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                                     >
-                                        Use the email form instead
+                                        {copy.use_email}
                                     </button>
                                 </div>
                             )}
@@ -70,7 +65,7 @@ export default function ContactMethods({ methods, mail, icons }: ContactMethodsP
             </div>
 
             <div className="flex flex-col gap-3 md:min-h-0 md:overflow-y-auto md:overscroll-contain md:pr-1 [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin">
-                <p className="text-xs font-semibold uppercase tracking-wide text-white/50">Other ways to reach me</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-white/50">{copy.alternatives}</p>
 
                 <ul id="contact-alternatives" className="space-y-3">
                     {alternatives.map((method) => (
@@ -88,7 +83,7 @@ export default function ContactMethods({ methods, mail, icons }: ContactMethodsP
                                     <span className="min-w-0 flex-1">
                                         <span className="flex items-center gap-2">
                                             <span className="truncate text-base font-semibold text-primary">{method.name}</span>
-                                            <span className={`ms-auto ${PILL}`}>{label(method)}</span>
+                                            <span className={`ms-auto ${PILL}`}>{copy.status[method.status]}</span>
                                         </span>
                                         {method.handle && <span className="block truncate text-sm text-secondary">{method.handle}</span>}
                                         <span className="mt-1.5 block text-sm text-white/60">{method.summary}</span>

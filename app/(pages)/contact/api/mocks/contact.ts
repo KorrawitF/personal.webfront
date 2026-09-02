@@ -42,11 +42,6 @@ export function getResumeMail(): ResumeMail {
     };
 }
 
-/**
- * Mock transport: nothing leaves the app yet. Swap the body for the real
- * provider call (SMTP or a transactional API) once one is picked — the
- * signature is what the server action already depends on.
- */
 export async function sendResumeMail(request: ResumeRequest): Promise<ResumeDelivery> {
     await new Promise((resolve) => setTimeout(resolve, 700));
 
@@ -60,5 +55,55 @@ export async function sendResumeMail(request: ResumeRequest): Promise<ResumeDeli
         id: `mock_${Date.now().toString(36)}`,
         to: request.email,
         delivered_at: new Date(),
+    };
+}
+
+export function getResumeFormCopy(): ResumeFormCopy {
+    return {
+        fields: {
+            name: { label: "Your name", placeholder: "Jane Doe" },
+            email: { label: "Email", placeholder: "jane@company.com" },
+            company: { label: "Company", placeholder: "Where you are writing from" },
+            role: { label: "Role you are hiring for", placeholder: "Backend Engineer" },
+            message: { label: "Anything I should know", placeholder: "A line about the role, the team or the timeline." },
+        },
+        optional: "optional",
+        submit: "Send me the résumé",
+        sending: "Sending…",
+        note: "Your address is used for this one mail — nothing else.",
+        errors: {
+            name_required: "Tell me who I am sending this to.",
+            email_required: "An email address is required — that is where the résumé goes.",
+            email_invalid: "That does not look like a valid email address.",
+            message_too_long: "Keep it under 1000 characters.",
+            invalid: "Check the highlighted fields and try again.",
+            failed: "The mail could not be sent just now. Try again in a moment.",
+        },
+        success: "{resume} is on its way to {email}. It carries my contact details too, so you can reply straight back.",
+    };
+}
+
+export async function getContactContent(): Promise<ContactContent> {
+    return {
+        header: {
+            title: "Contact",
+            lead: "The quickest route is email — tell me where to send things and my résumé arrives in your inbox with my own contact details attached, so you can reply straight back. Pick another channel on the right to switch to it.",
+        },
+        methods: getContactMethods(),
+        mail: getResumeMail(),
+        mail_copy: {
+            includes_label: "What lands in your inbox",
+            reply_label: "Reply on",
+        },
+        methods_copy: {
+            status: {
+                available: "Open",
+                pending: "Pending",
+            },
+            alternatives: "Other ways to reach me",
+            pending_note: "There is no form for this channel yet — it is still being wired up. Email is the one that reaches me today.",
+            use_email: "Use the email form instead",
+        },
+        form: getResumeFormCopy(),
     };
 }

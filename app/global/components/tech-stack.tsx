@@ -1,4 +1,6 @@
-export default function TechStack({ items, label, max, className = '' }: TechStackProps) {
+import fill from "../utils/format";
+
+export default function TechStack({ items, label, max, labels, className = '' }: TechStackProps) {
     if (!items.length) {
         return null;
     }
@@ -15,7 +17,7 @@ export default function TechStack({ items, label, max, className = '' }: TechSta
                         {tech}
                     </li>
                 ))}
-                {hidden > 0 && <li className="text-xs text-white/50">+{hidden} more</li>}
+                {hidden > 0 && labels && <li className="text-xs text-white/50">{fill(labels.more, { count: hidden })}</li>}
             </ul>
         </div>
     );

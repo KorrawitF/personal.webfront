@@ -3,16 +3,17 @@
 import { useState } from "react";
 import Image from "./image";
 import LockIcon from "../icons/lock";
+import fill from "../utils/format";
 
 const FACE = "absolute inset-0 flex flex-col overflow-hidden rounded-2xl border border-white/15 bg-background/80 shadow-lg shadow-black/30 backface-hidden";
 const SCROLLER = "min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 [scrollbar-width:thin] [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent]";
 
-function Links({ item }: { item: CardDetail }) {
+function Links({ item, labels }: { item: CardDetail, labels: CardLabels }) {
     if (item.confidential) {
         return (
             <p className="flex items-center gap-2 text-xs text-white/60">
                 <LockIcon className="h-4 w-4 shrink-0" />
-                Private repository &mdash; source is not public.
+                {labels.confidential}
             </p>
         );
     }
@@ -97,6 +98,7 @@ function Highlights({ items }: { items: string[] }) {
 
 export default function Card({
     item,
+    labels,
     flippable = true,
     defaultFlipped = false,
     className = '',
@@ -120,7 +122,7 @@ export default function Card({
                     {back}
                     {hasLinks && (
                         <div className="mt-auto pt-2">
-                            <Links item={item} />
+                            <Links item={item} labels={labels} />
                         </div>
                     )}
                 </div>
@@ -138,7 +140,7 @@ export default function Card({
                         type="button"
                         onClick={flip}
                         aria-expanded={flipped}
-                        aria-label={`Show more details about ${item.title}`}
+                        aria-label={fill(labels.show_details, { title: item.title })}
                         className="flex h-full w-full flex-col text-left transition-colors hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
                     >
                         <Banner item={item} />
@@ -149,7 +151,7 @@ export default function Card({
                             <div className="mt-auto space-y-2">
                                 {children}
                                 <p className="flex items-center gap-1.5 pt-1 text-xs font-medium text-primary">
-                                    View details
+                                    {labels.view_details}
                                     <svg className="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M4 9a8 8 0 0 1 13-6M20 15a8 8 0 0 1-13 6" />
                                         <path d="M4 4v5h5M20 20v-5h-5" />
@@ -170,7 +172,7 @@ export default function Card({
                             <button
                                 type="button"
                                 onClick={flip}
-                                aria-label={`Hide details about ${item.title}`}
+                                aria-label={fill(labels.hide_details, { title: item.title })}
                                 className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white transition-colors hover:border-primary hover:bg-primary hover:text-background focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                             >
                                 <svg className="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -186,7 +188,7 @@ export default function Card({
                         </div>
 
                         <div className="mt-auto shrink-0 border-t border-white/10 pt-3">
-                            <Links item={item} />
+                            <Links item={item} labels={labels} />
                         </div>
                     </div>
                 </div>

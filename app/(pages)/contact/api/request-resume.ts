@@ -1,6 +1,7 @@
 'use server'
 
-import { getResumeMail, sendResumeMail } from "./mocks/contact";
+import fill from "@/app/global/utils/format";
+import { getResumeFormCopy, getResumeMail, sendResumeMail } from "./mocks/contact";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -18,34 +19,35 @@ function toRequest(formData: FormData): ResumeRequest {
     };
 }
 
-function validate(request: ResumeRequest): ResumeFormErrors {
+function validate(request: ResumeRequest, copy: ResumeFormCopy['errors']): ResumeFormErrors {
     const errors: ResumeFormErrors = {};
 
     if (!request.name) {
-        errors.name = 'Tell me who I am sending this to.';
+        errors.name = copy.name_required;
     }
 
     if (!request.email) {
-        errors.email = 'An email address is required — that is where the résumé goes.';
+        errors.email = copy.email_required;
     } else if (!EMAIL_PATTERN.test(request.email)) {
-        errors.email = 'That does not look like a valid email address.';
+        errors.email = copy.email_invalid;
     }
 
     if (request.message && request.message.length > 1000) {
-        errors.message = 'Keep it under 1000 characters.';
+        errors.message = copy.message_too_long;
     }
 
     return errors;
 }
 
 export default async function requestResume(_state: ResumeFormState, formData: FormData): Promise<ResumeFormState> {
+    const copy = getResumeFormCopy();
     const request = toRequest(formData);
-    const errors = validate(request);
+    const errors = validate(request, copy.errors);
 
     if (Object.keys(errors).length) {
         return {
             status: 'error',
-            message: 'Check the highlighted fields and try again.',
+            message: copy.errors.invalid,
             errors,
             values: request,
         };
@@ -56,12 +58,12 @@ export default async function requestResume(_state: ResumeFormState, formData: F
 
         return {
             status: 'success',
-            message: `${getResumeMail().resume} is on its way to ${delivery.to}. It carries my contact details too, so you can reply straight back.`,
+            message: fill(copy.success, { resume: getResumeMail().resume, email: delivery.to }),
         };
     } catch {
         return {
             status: 'error',
-            message: 'The mail could not be sent just now. Try again in a moment.',
+            message: copy.errors.failed,
             values: request,
         };
     }

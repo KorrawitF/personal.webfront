@@ -45,6 +45,10 @@ declare global {
     type ContactMethodsProps = {
         methods: ContactMethod[],
         mail: ResumeMail,
+        mail_copy: MailContentsCopy,
+        copy: ContactMethodsCopy,
+        form: ResumeFormCopy,
+        card: CardLabels,
         icons: Record<string, ReactNode>,
     }
 

@@ -12,7 +12,7 @@ const menus = [
   { name: "Contact", href: "/contact" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ brand, open_menu, close_menu }: NavbarProps) {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -112,7 +112,7 @@ export default function Navbar() {
       <div className="mx-auto flex max-w flex-wrap items-center justify-between p-4 2xl:w-1/2">
         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center whitespace-nowrap text-xl font-semibold text-white">
-            <strong className="text-primary">K</strong>orrawit.
+            <strong className="text-primary">{brand.charAt(0)}</strong>{brand.slice(1)}
           </span>
         </Link>
 
@@ -122,7 +122,7 @@ export default function Navbar() {
           className={`inline-flex h-10 w-10 items-center justify-center rounded-base text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-neutral-tertiary md:hidden transition-transform ${isMenuOpen && "rotate-90"}`}
           aria-controls="navbar-menu"
           aria-expanded={isMenuOpen}
-          aria-label={isMenuOpen ? "Close main menu" : "Open main menu"}
+          aria-label={isMenuOpen ? close_menu : open_menu}
         >
           <svg
             className="h-6 w-6"
