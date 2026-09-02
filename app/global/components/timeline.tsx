@@ -23,7 +23,7 @@ export default async function TimeLine({className = '', items} : TimeLineProps) 
                             <time className="inline-block rounded border border-white/15 bg-white/10 px-1.5 py-0.5 text-xs font-medium text-white/80">
                                 {item.start_date}{item.end_date && ` - ${item.end_date}`}
                             </time>
-                            <div className="mt-2 flex flex-col gap-x-3 gap-y-0.5 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between">
+                            <div className="mt-2 flex flex-col gap-x-3 gap-y-0.5 sm:flex-row sm:flex-wrap sm:items-baseline">
                                 <h3 className="text-base font-semibold text-primary sm:text-lg">{item.title}</h3>
                                 {item.subtitle && <p className="text-sm text-secondary sm:text-base sm:font-medium">{item.subtitle}</p>}
                             </div>
