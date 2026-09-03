@@ -46,7 +46,8 @@ export default async function Home() {
                             </TransitionLink>
                         ))}
                     </div>
-
+                    
+                    {content.channels && content.channels.length > 0 && (
                     <ul className="flex items-center gap-3">
                         {content.channels.map((channel) => (
                             <li key={channel.label}>
@@ -62,6 +63,7 @@ export default async function Home() {
                             </li>
                         ))}
                     </ul>
+                    )}
                 </div>
 
                 <div className="reveal order-1 mx-auto w-40 max-w-full sm:w-56 md:order-2 md:col-span-2 md:w-full">

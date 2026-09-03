@@ -14,7 +14,6 @@ export default async function getHomeContent(): Promise<HomeContent> {
             src: "/profile.jpg",
             alt: "Korrawit Soodnalao",
         },
-        // The same channels the résumé mail hands out, so both stay in step.
-        channels: getResumeMail().contact_back.filter((channel) => channel.href),
+        // channels: getResumeMail().contact_back.filter((channel) => channel.href),
     };
 }

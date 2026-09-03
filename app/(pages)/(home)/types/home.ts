@@ -13,6 +13,6 @@ declare global {
         intro: string,
         actions: ActionLink[],
         portrait: Portrait,
-        channels: ContactChannel[],
+        channels?: ContactChannel[],
     }
 }
