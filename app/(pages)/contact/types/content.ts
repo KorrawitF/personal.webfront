@@ -8,6 +8,8 @@ declare global {
 
     type ResumeFormCopy = {
         fields: Record<keyof ResumeRequest, FormField>,
+        /** Longest message the field takes; the action enforces the same number. */
+        message_max_length: number,
         optional: string,
         submit: string,
         sending: string,

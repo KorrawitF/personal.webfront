@@ -8,6 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteContent();
 
   return {
+    metadataBase: new URL(site.url),
     title: {
       default: site.title.default,
       template: site.title.template,
@@ -30,7 +31,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
 
   return (
     <html
-      lang="en"
+      lang={site.locale}
       className={`${geistSans.variable} ${geistMono.variable} min-h-full antialiased`}
     >
       <body>

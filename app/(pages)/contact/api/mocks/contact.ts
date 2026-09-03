@@ -1,3 +1,6 @@
+import fill from "@/app/global/utils/format";
+import site, { resume } from "@/app/global/config/site";
+
 export default function getContactMethods(): ContactMethod[] {
     return [
         {
@@ -27,7 +30,7 @@ export default function getContactMethods(): ContactMethod[] {
 
 export function getResumeMail(): ResumeMail {
     return {
-        subject: "Korrawit Soodnalao — résumé and contact details",
+        subject: fill("{owner} — résumé and contact details", { owner: site.owner }),
         resume: "korrawit-soodnalao-resume.pdf",
         includes: [
             "The résumé as a PDF attachment",
@@ -67,6 +70,7 @@ export function getResumeFormCopy(): ResumeFormCopy {
             role: { label: "Role you are hiring for", placeholder: "Backend Engineer" },
             message: { label: "Anything I should know", placeholder: "A line about the role, the team or the timeline." },
         },
+        message_max_length: resume.message_max_length,
         optional: "optional",
         submit: "Send me the résumé",
         sending: "Sending…",
@@ -75,7 +79,7 @@ export function getResumeFormCopy(): ResumeFormCopy {
             name_required: "Tell me who I am sending this to.",
             email_required: "An email address is required — that is where the résumé goes.",
             email_invalid: "That does not look like a valid email address.",
-            message_too_long: "Keep it under 1000 characters.",
+            message_too_long: fill("Keep it under {max} characters.", { max: resume.message_max_length }),
             invalid: "Check the highlighted fields and try again.",
             failed: "The mail could not be sent just now. Try again in a moment.",
         },

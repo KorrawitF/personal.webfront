@@ -19,21 +19,21 @@ function toRequest(formData: FormData): ResumeRequest {
     };
 }
 
-function validate(request: ResumeRequest, copy: ResumeFormCopy['errors']): ResumeFormErrors {
+function validate(request: ResumeRequest, copy: ResumeFormCopy): ResumeFormErrors {
     const errors: ResumeFormErrors = {};
 
     if (!request.name) {
-        errors.name = copy.name_required;
+        errors.name = copy.errors.name_required;
     }
 
     if (!request.email) {
-        errors.email = copy.email_required;
+        errors.email = copy.errors.email_required;
     } else if (!EMAIL_PATTERN.test(request.email)) {
-        errors.email = copy.email_invalid;
+        errors.email = copy.errors.email_invalid;
     }
 
-    if (request.message && request.message.length > 1000) {
-        errors.message = copy.message_too_long;
+    if (request.message && request.message.length > copy.message_max_length) {
+        errors.message = copy.errors.message_too_long;
     }
 
     return errors;
@@ -42,7 +42,7 @@ function validate(request: ResumeRequest, copy: ResumeFormCopy['errors']): Resum
 export default async function requestResume(_state: ResumeFormState, formData: FormData): Promise<ResumeFormState> {
     const copy = getResumeFormCopy();
     const request = toRequest(formData);
-    const errors = validate(request, copy.errors);
+    const errors = validate(request, copy);
 
     if (Object.keys(errors).length) {
         return {

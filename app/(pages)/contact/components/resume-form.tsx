@@ -100,7 +100,7 @@ export default function ResumeForm({ copy, intro }: { copy: ResumeFormCopy, intr
                         id="message"
                         name="message"
                         rows={3}
-                        maxLength={1000}
+                        maxLength={copy.message_max_length}
                         defaultValue={values?.message}
                         aria-invalid={Boolean(errors?.message)}
                         aria-describedby={errors?.message ? 'message-error' : undefined}

@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/with-env.mjs PORT next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node scripts/with-env.mjs PORT next start",
     "lint": "eslint",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "node scripts/with-env.mjs STORYBOOK_PORT storybook dev",
     "build-storybook": "storybook build"
   },
   "dependencies": {
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "latest",
+    "@next/env": "16.3.3",
     "@storybook/addon-a11y": "^10.5.10",
     "@storybook/addon-docs": "^10.5.10",
     "@storybook/addon-mcp": "latest",

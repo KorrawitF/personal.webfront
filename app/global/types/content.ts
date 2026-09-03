@@ -42,6 +42,10 @@ declare global {
     type SiteContent = {
         title: SiteTitle,
         brand: string,
+        /** Absolute origin the site is served from, with no trailing slash. */
+        url: string,
+        /** BCP 47 tag for the lang attribute on <html>. */
+        locale: string,
         open_menu: string,
         close_menu: string,
         card: CardLabels,

@@ -1,3 +1,5 @@
+import site from "@/app/global/config/site";
+
 export default function getExperiences(): Experience[] {
     return [
         {
@@ -83,12 +85,12 @@ export async function getAboutContent(): Promise<AboutContent> {
             lead: "A Software Engineer with 3+ years of experience building scalable backend services, APIs and cloud-native applications — here’s the short version, and the roles that got me here.",
         },
         profile: {
-            name: "Korrawit Soodnalao",
+            name: site.owner,
             role: "Full Stack Developer",
             tags: ["Backend", "Cloud", "DevOps"],
             portrait: {
                 src: "/profile.jpg",
-                alt: "Korrawit Soodnalao",
+                alt: site.owner,
             },
         },
         paragraphs: [
