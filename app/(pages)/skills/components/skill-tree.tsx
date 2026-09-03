@@ -5,6 +5,8 @@ import Image from "@/app/global/components/image";
 import layoutSkillTree, { COLUMN } from "../utils/tree-layout";
 
 const MAX_LEVEL = 5;
+/** The domain label may run wider than the column its node sits in. */
+const LABEL = COLUMN + 48;
 
 function initials(name: string): string {
     return name
@@ -38,7 +40,6 @@ function Meter({ level, color }: { level: number, color: string }) {
 
 export default function SkillTree({ domain, selectedId, activeIds, onSelect }: SkillTreeProps) {
     const layout = useMemo(() => layoutSkillTree(domain), [domain]);
-    const points = domain.skills.reduce((total, skill) => total + skill.level, 0);
 
     return (
         <section
@@ -54,7 +55,8 @@ export default function SkillTree({ domain, selectedId, activeIds, onSelect }: S
             >
                 {layout.edges.map((edge) => {
                     const locked = edge.to.skill.level === 0;
-                    const active = activeIds.has(edge.to.skill.id) && activeIds.has(edge.from.skill.id);
+                    // An edge off the domain node has no parent skill to light up with.
+                    const active = activeIds.has(edge.to.skill.id) && (!edge.parent || activeIds.has(edge.parent));
 
                     return (
                         <path
@@ -71,6 +73,35 @@ export default function SkillTree({ domain, selectedId, activeIds, onSelect }: S
                     );
                 })}
             </svg>
+
+            {/* The domain itself: the trunk every branch grows from, not a skill you can pick. */}
+            <p
+                className="absolute flex flex-col items-center gap-1.5 leading-tight"
+                style={{
+                    left: layout.root.x - LABEL / 2,
+                    top: layout.root.y - layout.root.radius,
+                    width: LABEL,
+                }}
+            >
+                <span
+                    aria-hidden="true"
+                    className="flex items-center justify-center rounded-full border-2 backdrop-blur-sm"
+                    style={{
+                        width: layout.root.radius * 2,
+                        height: layout.root.radius * 2,
+                        borderColor: domain.color,
+                        background: `color-mix(in srgb, ${domain.color} 18%, transparent)`,
+                    }}
+                >
+                    <span className="h-2.5 w-2.5 rounded-full" style={{ background: domain.color }} />
+                </span>
+                <span
+                    className="text-center text-[11px] font-semibold uppercase tracking-[0.18em]"
+                    style={{ color: domain.color }}
+                >
+                    {domain.name}
+                </span>
+            </p>
 
             <ul>
                 {layout.nodes.map((node) => {
@@ -110,7 +141,7 @@ export default function SkillTree({ domain, selectedId, activeIds, onSelect }: S
                                 >
                                     {skill.icon ? (
                                         <Image
-                                            className={`object-contain ${node.depth === 0 ? 'h-7 w-7' : 'h-5 w-5'} ${locked ? 'opacity-40' : ''}`}
+                                            className={`h-5 w-5 object-contain ${locked ? 'opacity-40' : ''}`}
                                             src={skill.icon}
                                             alt=""
                                         />
@@ -126,36 +157,24 @@ export default function SkillTree({ domain, selectedId, activeIds, onSelect }: S
                                 </span>
 
                                 {/* A plate, so the branch running up from the tier below cannot
-                                    cut through the name. The root's label is the domain one instead. */}
-                                {node.depth > 0 && (
-                                    <span className="flex max-w-full flex-col items-center gap-1 rounded-md bg-background/90 px-1.5 py-0.5">
-                                        <span
-                                            className={`text-center text-[11px] leading-tight wrap-break-word ${
-                                                selected ? 'font-semibold text-white' : locked ? 'text-white/40' : 'text-white/75'
-                                            }`}
-                                        >
-                                            {skill.name}
-                                        </span>
-                                        {locked
-                                            ? <span className="text-[10px] leading-none text-white/35">0/{MAX_LEVEL}</span>
-                                            : <Meter level={skill.level} color={domain.color} />}
+                                    cut through the name. */}
+                                <span className="flex max-w-full flex-col items-center gap-1 rounded-md bg-background/90 px-1.5 py-0.5">
+                                    <span
+                                        className={`text-center text-[11px] leading-tight wrap-break-word ${
+                                            selected ? 'font-semibold text-white' : locked ? 'text-white/40' : 'text-white/75'
+                                        }`}
+                                    >
+                                        {skill.name}
                                     </span>
-                                )}
+                                    {locked
+                                        ? <span className="text-[10px] leading-none text-white/35">0/{MAX_LEVEL}</span>
+                                        : <Meter level={skill.level} color={domain.color} />}
+                                </span>
                             </button>
                         </li>
                     );
                 })}
             </ul>
-
-            <p className="absolute bottom-0 left-0 w-full text-center leading-tight">
-                <span
-                    className="block text-[11px] font-semibold uppercase tracking-[0.18em]"
-                    style={{ color: domain.color }}
-                >
-                    {domain.name}
-                </span>
-                <span className="block text-lg font-bold" style={{ color: domain.color }}>{points}</span>
-            </p>
         </section>
     );
 }

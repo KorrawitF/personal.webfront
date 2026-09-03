@@ -43,8 +43,6 @@ export default function SkillExplorer({ domains, labels, tech_stack }: SkillExpl
         }
     }, []);
 
-    // A view transition only rides along with an async update, so the selection
-    // goes through startTransition to give the detail panel something to cross-fade.
     const select = (domain: SkillDomain, skill: Skill) => {
         startTransition(() => setSelectedId(skill.id));
 
@@ -105,8 +103,6 @@ export default function SkillExplorer({ domains, labels, tech_stack }: SkillExpl
                 </div>
 
                 <div ref={detail} className="flex min-h-0 scroll-mt-20">
-                    {/* Keyed, so React reads a new selection as an exit and an enter
-                        pair and `share` can cross-fade between the two panels. */}
                     <ViewTransition key={selectedId} name="skill-detail" share="swap" default="none">
                         <SkillDetail
                             domain={selected.domain}

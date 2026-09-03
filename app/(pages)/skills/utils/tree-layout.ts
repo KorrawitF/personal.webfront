@@ -4,8 +4,8 @@ export const ROOT_RADIUS = 26;
 export const NODE_RADIUS = 20;
 
 const PADDING_X = 12;
-const PADDING_TOP = ROOT_RADIUS + 8;
-const PADDING_BOTTOM = 74;
+const PADDING_TOP = NODE_RADIUS + 8;
+const PADDING_BOTTOM = ROOT_RADIUS + 34;
 
 function group(skills: Skill[]): { roots: Skill[], children: Map<string, Skill[]> } {
     const known = new Set(skills.map((skill) => skill.id));
@@ -54,10 +54,17 @@ export default function layoutSkillTree(domain: SkillDomain): SkillTreeLayout {
         return column;
     };
 
-    roots.forEach((root) => walk(root, 0));
+    const branches = roots.map((skill) => walk(skill, 1));
 
     const depths = [...placed.values()].map((position) => position.depth);
-    const maxDepth = depths.length ? Math.max(...depths) : 0;
+    const maxDepth = depths.length ? Math.max(...depths) : 1;
+    const column = branches.length ? (Math.min(...branches) + Math.max(...branches)) / 2 : 0;
+
+    const root: SkillPoint = {
+        x: PADDING_X + column * COLUMN + COLUMN / 2,
+        y: PADDING_TOP + maxDepth * ROW,
+        radius: ROOT_RADIUS,
+    };
 
     const nodes: SkillNode[] = domain.skills.flatMap((skill) => {
         const position = placed.get(skill.id);
@@ -71,7 +78,7 @@ export default function layoutSkillTree(domain: SkillDomain): SkillTreeLayout {
             depth: position.depth,
             x: PADDING_X + position.column * COLUMN + COLUMN / 2,
             y: PADDING_TOP + (maxDepth - position.depth) * ROW,
-            radius: position.depth === 0 ? ROOT_RADIUS : NODE_RADIUS,
+            radius: NODE_RADIUS,
         }];
     });
 
@@ -80,16 +87,22 @@ export default function layoutSkillTree(domain: SkillDomain): SkillTreeLayout {
     const edges: SkillEdge[] = nodes.flatMap((node) => {
         const parent = node.skill.parent ? byId.get(node.skill.parent) : undefined;
 
-        if (!parent || parent === node) {
+        if (parent === node) {
             return [];
         }
 
-        return [{ id: `${parent.skill.id}-${node.skill.id}`, from: parent, to: node }];
+        return [{
+            id: `${parent?.skill.id ?? domain.id}-${node.skill.id}`,
+            from: parent ?? root,
+            to: node,
+            parent: parent?.skill.id,
+        }];
     });
 
     return {
         width: Math.max(slots, 1) * COLUMN + PADDING_X * 2,
         height: PADDING_TOP + maxDepth * ROW + PADDING_BOTTOM,
+        root,
         nodes,
         edges,
     };

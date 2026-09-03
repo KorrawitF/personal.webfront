@@ -7,30 +7,8 @@ export default function getSkillDomains(): SkillDomain[] {
             summary: "The languages I write production code in, and the parts of each one I have actually leaned on.",
             skills: [
                 {
-                    id: "languages",
-                    name: "Languages",
-                    level: 5,
-                    summary: "Three years of shipping backend code, with enough front end to own a feature end to end. Go is the branch I have taken furthest; the rest cover the systems I inherited.",
-                    tools: ["Golang", "PHP", "Python", "TypeScript", "Java"],
-                    use_cases: [
-                        "Choosing a language per service instead of defaulting to whatever the team started with",
-                        "Keeping legacy PHP alive while new services are carved out in Go",
-                        "Reading across stacks during an incident, so a trace never stops at a language boundary",
-                    ],
-                    experiences: [
-                        {
-                            id: 1,
-                            title: "Backend and full stack work",
-                            org: "Ascend Group, BJC (Big C)",
-                            period: "2023 - Present",
-                            detail: "Go for new services, PHP and Laravel for the ERP that funds them, Python for the automation around both, and TypeScript wherever a screen was needed.",
-                        },
-                    ],
-                },
-                {
                     id: "go",
                     name: "Golang",
-                    parent: "languages",
                     level: 5,
                     icon: "/Go.svg",
                     summary: "My default for anything that has to stay up: HTTP and gRPC services, Kafka consumers, and the small CLIs that keep operations moving.",
@@ -104,7 +82,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "php",
                     name: "PHP",
-                    parent: "languages",
                     level: 4,
                     summary: "The language most of the ERP I worked on was written in, and where I learned to change code a whole finance team depends on.",
                     tools: ["PHP 8", "Composer", "PHPUnit", "Xdebug"],
@@ -148,7 +125,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "python",
                     name: "Python",
-                    parent: "languages",
                     level: 3,
                     icon: "/Python.svg",
                     summary: "My glue language: document pipelines, data fixes and the scripts nobody wants to write twice.",
@@ -193,7 +169,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "typescript",
                     name: "TypeScript",
-                    parent: "languages",
                     level: 4,
                     icon: "/TypeScript.svg",
                     summary: "Types as the contract between the front end and whatever backend it talks to, rather than as decoration.",
@@ -239,7 +214,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "rust",
                     name: "Rust",
-                    parent: "languages",
                     level: 0,
                     summary: "On the roadmap. I want it for the places where Go's garbage collector is the thing in the way, not as a rewrite for its own sake.",
                     tools: ["cargo", "tokio", "axum"],
@@ -258,30 +232,8 @@ export default function getSkillDomains(): SkillDomain[] {
             summary: "How the services get packaged, scheduled and given a network to live on.",
             skills: [
                 {
-                    id: "infrastructure",
-                    name: "Infrastructure",
-                    level: 4,
-                    summary: "I run what I write. Containers, a cluster to schedule them on, and enough Linux and networking to debug it at two in the morning.",
-                    tools: ["Docker", "Kubernetes", "Terraform", "Linux"],
-                    use_cases: [
-                        "Giving a new service a paved road onto a shared cluster",
-                        "Reproducible environments from a laptop through to production",
-                        "Resource limits set from measurements, not guesses",
-                    ],
-                    experiences: [
-                        {
-                            id: 1,
-                            title: "Kubernetes Platform Tooling",
-                            org: "Side project",
-                            period: "May 2025 - Present",
-                            detail: "A base Helm chart, Argo CD app-of-apps definitions and Terraform for the cluster and its add-ons, so a new service arrives with metrics, logs and alerts already wired.",
-                        },
-                    ],
-                },
-                {
                     id: "docker",
                     name: "Docker",
-                    parent: "infrastructure",
                     level: 5,
                     icon: "/Docker.svg",
                     summary: "Multi-stage builds, small final images, and a compose file that gets a new joiner running the stack before lunch.",
@@ -373,7 +325,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "linux",
                     name: "Linux & Networking",
-                    parent: "infrastructure",
                     level: 4,
                     summary: "The layer under everything else: processes, file descriptors, DNS, TLS and where the packet actually stopped.",
                     tools: ["systemd", "NGINX", "tcpdump", "dig", "openssl"],
@@ -414,30 +365,8 @@ export default function getSkillDomains(): SkillDomain[] {
             summary: "Moving work between services without losing it, duplicating it, or letting one slow consumer take down the rest.",
             skills: [
                 {
-                    id: "messaging",
-                    name: "Messaging",
-                    level: 4,
-                    summary: "Most of the systems I have worked on stopped being reliable the moment they were only synchronous. Events are how they got their reliability back.",
-                    tools: ["Apache Kafka", "Redis Streams", "outbox pattern"],
-                    use_cases: [
-                        "Decoupling a write path from every system that wants to react to it",
-                        "Absorbing partner outages without dropping business events",
-                        "Rebuilding a read model by replaying from the log",
-                    ],
-                    experiences: [
-                        {
-                            id: 1,
-                            title: "Stock movement events",
-                            org: "Warehouse Management System",
-                            period: "Sep 2025 - Feb 2026",
-                            detail: "Stock movements published once and consumed by the WMS, the ERP and the storefront, instead of three systems polling one database.",
-                        },
-                    ],
-                },
-                {
                     id: "kafka",
                     name: "Kafka",
-                    parent: "messaging",
                     level: 4,
                     icon: "/Apache Kafka.svg",
                     summary: "Partitioning, consumer groups, offset handling and the retention settings that decide what a replay can still reach.",
@@ -525,7 +454,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "redis-streams",
                     name: "Redis Streams",
-                    parent: "messaging",
                     level: 3,
                     icon: "/Redis.svg",
                     summary: "For work that needs a queue but not a whole Kafka cluster: notifications, retries and short-lived jobs.",
@@ -553,30 +481,8 @@ export default function getSkillDomains(): SkillDomain[] {
             summary: "Where the state lives, how it is shaped, and how it stays fast once there is a lot of it.",
             skills: [
                 {
-                    id: "data",
-                    name: "Data Stores",
-                    level: 4,
-                    summary: "Relational first, cache where it is measured to help, document stores where the shape genuinely varies.",
-                    tools: ["PostgreSQL", "MySQL", "Redis", "MongoDB"],
-                    use_cases: [
-                        "Schema design that survives the feature after next",
-                        "Migrations applied to live systems without a maintenance window",
-                        "Query plans read before indexes are added",
-                    ],
-                    experiences: [
-                        {
-                            id: 1,
-                            title: "ERP and warehouse data",
-                            org: "BJC (Big C)",
-                            period: "2024 - 2026",
-                            detail: "Owned schemas and migrations for the purchasing, inventory and finance modules, then the read models the warehouse services ran on.",
-                        },
-                    ],
-                },
-                {
                     id: "postgres",
                     name: "PostgreSQL",
-                    parent: "data",
                     level: 5,
                     icon: "/PostgresSQL.svg",
                     summary: "My default database. Transactions, JSONB where it earns its place, materialised views, and honest use of EXPLAIN.",
@@ -621,7 +527,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "mysql",
                     name: "MySQL",
-                    parent: "data",
                     level: 4,
                     icon: "/MySQL.svg",
                     summary: "The database the ERP came with. Years of live schema changes taught me to treat a migration as a deploy risk of its own.",
@@ -666,7 +571,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "redis",
                     name: "Redis",
-                    parent: "data",
                     level: 4,
                     icon: "/Redis.svg",
                     summary: "In front of the hottest lookups, and for the locks and counters that do not belong in a relational table.",
@@ -711,7 +615,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "mongodb",
                     name: "MongoDB",
-                    parent: "data",
                     level: 3,
                     icon: "/MongoDB.svg",
                     summary: "Used where documents genuinely differ from each other: extraction output, audit payloads, partner responses kept verbatim.",
@@ -739,30 +642,8 @@ export default function getSkillDomains(): SkillDomain[] {
             summary: "Getting a change from a merge request into production, and knowing what it did once it arrived.",
             skills: [
                 {
-                    id: "delivery",
-                    name: "Delivery & Ops",
-                    level: 4,
-                    summary: "A pipeline trusted enough to run on every merge, and dashboards specific enough that an alert means something.",
-                    tools: ["GitLab CI", "Argo CD", "Grafana", "HashiCorp Vault"],
-                    use_cases: [
-                        "Build, test, scan and deploy from one pipeline definition",
-                        "Dashboards and alerts provisioned as code with the service",
-                        "Secrets rotated without a redeploy",
-                    ],
-                    experiences: [
-                        {
-                            id: 1,
-                            title: "Paved-road delivery",
-                            org: "Kubernetes Platform Tooling",
-                            period: "May 2025 - Present",
-                            detail: "One manifest gives a service its pipeline, its dashboards and its alert rules, instead of config copied between repositories.",
-                        },
-                    ],
-                },
-                {
                     id: "gitlab",
                     name: "GitLab CI",
-                    parent: "delivery",
                     level: 4,
                     icon: "/GitLab.svg",
                     summary: "Where most of my pipelines live: templated stages, cached builds, and no deploy step a human has to remember.",
@@ -807,7 +688,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "grafana",
                     name: "Grafana & Prometheus",
-                    parent: "delivery",
                     level: 4,
                     icon: "/Grafana.svg",
                     summary: "Metrics chosen per service, dashboards checked in beside the code, and panels that answer a question someone actually asks during an incident.",
@@ -852,7 +732,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "vault",
                     name: "HashiCorp Vault",
-                    parent: "delivery",
                     level: 3,
                     icon: "/HashiCorp Vault.svg",
                     summary: "Secrets and signing keys kept out of the repository and out of the pipeline variables, and rotated without a redeploy.",
@@ -893,30 +772,8 @@ export default function getSkillDomains(): SkillDomain[] {
             summary: "Enough front end to take a feature all the way to the screen the user actually touches.",
             skills: [
                 {
-                    id: "frontend",
-                    name: "Frontend",
-                    level: 3,
-                    summary: "Not my main branch, but far enough along to own a feature end to end rather than hand a JSON payload over a wall.",
-                    tools: ["React", "Vue.js", "Next.js", "Tailwind CSS"],
-                    use_cases: [
-                        "Internal tools and dashboards nobody else had time to build",
-                        "Owning a feature from schema to screen",
-                        "Component libraries documented so the team reuses them",
-                    ],
-                    experiences: [
-                        {
-                            id: 1,
-                            title: "ERP screens",
-                            org: "ERP Module Suite",
-                            period: "Jun 2024 - Feb 2025",
-                            detail: "Built the Vue screens finance and purchasing use daily, against the Laravel API underneath them.",
-                        },
-                    ],
-                },
-                {
                     id: "react",
                     name: "React",
-                    parent: "frontend",
                     level: 4,
                     summary: "Hooks, composition, and keeping state where it belongs - which is usually further up, or on the server.",
                     tools: ["React 19", "TanStack Query", "Storybook", "Vitest"],
@@ -982,7 +839,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "vue",
                     name: "Vue.js",
-                    parent: "frontend",
                     level: 4,
                     icon: "/Vue.js.svg",
                     summary: "The framework behind the ERP screens I shipped: composition API, Pinia, and forms with real validation rules.",
@@ -1004,7 +860,6 @@ export default function getSkillDomains(): SkillDomain[] {
                 {
                     id: "tailwind",
                     name: "Tailwind CSS",
-                    parent: "frontend",
                     level: 4,
                     icon: "/Tailwind CSS.svg",
                     summary: "Utility classes with the theme kept in CSS variables, so a colour change is one line rather than a search across components.",
