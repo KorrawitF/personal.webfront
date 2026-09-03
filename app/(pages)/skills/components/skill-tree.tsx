@@ -55,7 +55,6 @@ export default function SkillTree({ domain, selectedId, activeIds, onSelect }: S
             >
                 {layout.edges.map((edge) => {
                     const locked = edge.to.skill.level === 0;
-                    // An edge off the domain node has no parent skill to light up with.
                     const active = activeIds.has(edge.to.skill.id) && (!edge.parent || activeIds.has(edge.parent));
 
                     return (
@@ -74,7 +73,6 @@ export default function SkillTree({ domain, selectedId, activeIds, onSelect }: S
                 })}
             </svg>
 
-            {/* The domain itself: the trunk every branch grows from, not a skill you can pick. */}
             <p
                 className="absolute flex flex-col items-center gap-1.5 leading-tight"
                 style={{
@@ -156,8 +154,6 @@ export default function SkillTree({ domain, selectedId, activeIds, onSelect }: S
                                     )}
                                 </span>
 
-                                {/* A plate, so the branch running up from the tier below cannot
-                                    cut through the name. */}
                                 <span className="flex max-w-full flex-col items-center gap-1 rounded-md bg-background/90 px-1.5 py-0.5">
                                     <span
                                         className={`text-center text-[11px] leading-tight wrap-break-word ${

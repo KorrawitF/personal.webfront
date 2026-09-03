@@ -86,7 +86,7 @@ export default function SkillDetail({ domain, skill, labels, tech_stack, classNa
                                 >
                                     <p className="text-sm font-medium wrap-break-word text-secondary">{experience.title}</p>
                                     <p className="text-xs text-white/50">
-                                        {experience.org && <>{experience.org} &middot; </>}{experience.period}
+                                        {experience.org && <>{experience.org} </>}
                                     </p>
                                     <p className="mt-1.5 text-sm wrap-break-word text-white/70">{experience.detail}</p>
                                 </li>

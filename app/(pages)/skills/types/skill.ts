@@ -5,7 +5,6 @@ declare global {
         id: number,
         title: string,
         org?: string,
-        period: string,
         detail: string,
     }
 
