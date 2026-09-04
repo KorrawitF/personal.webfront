@@ -11,7 +11,7 @@ export default async function TimeLine({className = '', items} : TimeLineProps) 
                         <li className="relative ms-6 pb-10 last:pb-0 sm:ms-8" key={item.id}>
                             {
                                 item.icon ?
-                                    (<span className="absolute -inset-s-11 top-0 flex h-9 w-9 items-center justify-center overflow-hidden rounded-full sm:-inset-s-13">
+                                    (<span className="absolute -inset-s-11 top-0 flex h-9 w-9 items-center justify-center bg-primary overflow-hidden rounded-full sm:-inset-s-13">
                                         <Image className="h-full w-full object-cover" src={item.icon} alt={item.subtitle ?? item.title} />
                                     </span>) :
                                     (
