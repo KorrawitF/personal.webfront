@@ -35,9 +35,10 @@ if (configured && !port) {
     console.warn(`[with-env] ignoring ${variable}="${configured}": not a port number.`);
 }
 
-// `-p` is the flag both `next` and `storybook` take. Anything the caller passed
-// explicitly comes after it and so wins.
-const argv = [command, ...(port ? ['-p', port] : []), ...args];
+// `-p` is the flag both `next` and `storybook` take. Both CLIs require it to
+// come after the subcommand (`next dev -p 3000`, not `next -p 3000 dev`) --
+// leading with the flag makes `next` treat the subcommand as a directory.
+const argv = [command, ...args, ...(port ? ['-p', port] : [])];
 
 /**
  * The CLI lives in `node_modules/.bin`, which on Windows means a `.cmd` shim that
