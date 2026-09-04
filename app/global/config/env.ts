@@ -1,7 +1,7 @@
 /**
- * Coercion helpers for the config modules. `site.ts` is the only file in the app
- * that reads `process.env`; everything else imports the value from it, so a
- * variable is named, defaulted and documented exactly once.
+ * Coercion helpers for the config modules. `site.ts` and `api.ts` are the only
+ * files in the app that read `process.env`; everything else imports the value
+ * from one of them, so a variable is named, defaulted and documented exactly once.
  *
  * The reads there are written out in full — `process.env.NEXT_PUBLIC_SITE_URL`,
  * never `process.env[name]`. Next inlines `NEXT_PUBLIC_*` into the browser bundle
