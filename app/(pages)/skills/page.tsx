@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import getSiteContent from "@/app/global/api/mocks/site";
-import getSkillsCopy from "./api/mocks/skills";
+import getSiteContent from "@/app/global/api/site";
+import getSkillsCopy from "./api/content";
 import getSkillDomains from "./api/skill-domains";
 import PageTransition from "@/app/global/components/page-transition";
 import SkillExplorer from "./components/skill-explorer";
 
-export function generateMetadata(): Metadata {
-    const { header } = getSkillsCopy();
+export async function generateMetadata(): Promise<Metadata> {
+    const { header } = await getSkillsCopy();
 
     return { title: header.title };
 }
@@ -23,8 +23,8 @@ async function SkillExplorerSection({ labels }: { labels: SkillDetailLabels }) {
     return <SkillExplorer domains={domains} labels={labels} tech_stack={site.tech_stack} />;
 }
 
-export default function Skills() {
-    const { header, detail } = getSkillsCopy();
+export default async function Skills() {
+    const { header, detail } = await getSkillsCopy();
 
     return (
         <PageTransition>

@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./global/components/navbar";
-import getSiteContent from "./global/api/mocks/site";
+import getSiteContent from "./global/api/site";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {

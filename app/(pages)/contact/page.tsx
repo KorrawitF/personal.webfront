@@ -1,10 +1,11 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import GithubIcon from "@/app/global/icons/github";
 import LinkedInIcon from "@/app/global/icons/linkedin";
 import MailIcon from "@/app/global/icons/mail";
-import getSiteContent from "@/app/global/api/mocks/site";
-import { getContactContent } from "./api/mocks/contact";
+import getSiteContent from "@/app/global/api/site";
+import getContactContent from "./api/content";
 import getContactMethods from "./api/contact-methods";
 import getResumeFormCopy from "./api/form";
 import PageTransition from "@/app/global/components/page-transition";
@@ -22,13 +23,30 @@ const icons: Record<string, ReactNode> = {
     github: <GithubIcon className="h-5 w-5" color="currentColor" />,
 };
 
+/**
+ * Isolated behind its own `await` so the header above can prerender: the
+ * methods list and form copy come from live backend calls that cache
+ * components can't statically cache, so they have to stay inside a
+ * Suspense boundary instead.
+ */
+async function ContactBody({ content, card }: { content: Omit<ContactContent, 'methods' | 'form'>, card: CardLabels }) {
+    const [methods, form] = await Promise.all([getContactMethods(), getResumeFormCopy()]);
+
+    return (
+        <ContactMethods
+            methods={methods}
+            mail={content.mail}
+            mail_copy={content.mail_copy}
+            copy={content.methods_copy}
+            form={form}
+            card={card}
+            icons={icons}
+        />
+    );
+}
+
 export default async function Contact() {
-    const [content, methods, site, form] = await Promise.all([
-        getContactContent(),
-        getContactMethods(),
-        getSiteContent(),
-        getResumeFormCopy(),
-    ]);
+    const [content, site] = await Promise.all([getContactContent(), getSiteContent()]);
 
     return (
         <PageTransition>
@@ -41,15 +59,9 @@ export default async function Contact() {
                     <p className="text-white/70">{content.header.lead}</p>
                 </header>
 
-                <ContactMethods
-                    methods={methods}
-                    mail={content.mail}
-                    mail_copy={content.mail_copy}
-                    copy={content.methods_copy}
-                    form={form}
-                    card={site.card}
-                    icons={icons}
-                />
+                <Suspense fallback={<p className="text-white/50">Loading contact options…</p>}>
+                    <ContactBody content={content} card={site.card} />
+                </Suspense>
             </section>
         </PageTransition>
     );

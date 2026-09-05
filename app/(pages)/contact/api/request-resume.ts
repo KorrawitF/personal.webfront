@@ -1,7 +1,8 @@
 'use server'
 
 import fill from "@/app/global/utils/format";
-import { getResumeMail, sendResumeMail } from "./mocks/contact";
+import { sendResumeMail } from "./mocks/contact";
+import getContactContent from "./content";
 import getResumeFormCopy from "./form";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -55,11 +56,11 @@ export default async function requestResume(_state: ResumeFormState, formData: F
     }
 
     try {
-        const delivery = await sendResumeMail(request);
+        const [content, delivery] = await Promise.all([getContactContent(), sendResumeMail(request)]);
 
         return {
             status: 'success',
-            message: fill(copy.success, { resume: getResumeMail().resume, email: delivery.to }),
+            message: fill(copy.success, { resume: content.mail.resume, email: delivery.to }),
         };
     } catch {
         return {

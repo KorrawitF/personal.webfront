@@ -3,15 +3,15 @@ import type { Metadata } from "next";
 import Image from "@/app/global/components/image";
 import TechStack from "@/app/global/components/tech-stack";
 import TimeLine from "@/app/global/components/timeline";
-import getSiteContent from "@/app/global/api/mocks/site";
+import getSiteContent from "@/app/global/api/site";
 import { options } from "@/app/global/constants/DateFormat";
 import fill from "@/app/global/utils/format";
 import PageTransition from "@/app/global/components/page-transition";
-import getAboutCopy from "./api/mocks/about";
+import getAboutCopy from "./api/content";
 import getWorkExperiences from "./api/work-experiences";
 
-export function generateMetadata(): Metadata {
-    const { header } = getAboutCopy();
+export async function generateMetadata(): Promise<Metadata> {
+    const { header } = await getAboutCopy();
 
     return { title: header.title };
 }
@@ -122,8 +122,8 @@ async function AboutBody({ copy }: { copy: Omit<AboutContent, 'facts' | 'experie
     );
 }
 
-export default function About() {
-    const copy = getAboutCopy();
+export default async function About() {
+    const copy = await getAboutCopy();
 
     return (
         <PageTransition>

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
 
 import Navbar from '../../app/global/components/navbar';
-import getSiteContent from '../../app/global/api/mocks/site';
+import getSiteContent from '../fixtures/site';
 
 const site = await getSiteContent();
 

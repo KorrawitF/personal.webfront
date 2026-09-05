@@ -1,5 +1,10 @@
 import site from "@/app/global/config/site";
 
+/**
+ * Stories render components in isolation and must not depend on a running
+ * backend, so this stands in for the real `getSiteContent` (which now hits
+ * the CMS) with the same shape.
+ */
 export default async function getSiteContent(): Promise<SiteContent> {
     return {
         title: site.title,

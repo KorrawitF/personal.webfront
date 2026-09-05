@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, within } from 'storybook/test';
 
 import TechStack from '../../app/global/components/tech-stack';
-import getSiteContent from '../../app/global/api/mocks/site';
+import getSiteContent from '../fixtures/site';
 
 const site = await getSiteContent();
 

@@ -5,7 +5,7 @@ import LinkedInIcon from "@/app/global/icons/linkedin";
 import MailIcon from "@/app/global/icons/mail";
 import PageTransition from "@/app/global/components/page-transition";
 import TransitionLink from "@/app/global/components/transition-link";
-import getHomeContent from "./api/mocks/home";
+import getHomeContent from "./api/home";
 
 const icons: Record<string, ReactNode> = {
     Email: <MailIcon className="h-5 w-5" />,

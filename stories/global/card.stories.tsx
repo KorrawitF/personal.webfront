@@ -4,7 +4,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import Card from '../../app/global/components/card';
 import TechStack from '../../app/global/components/tech-stack';
 import ExternalLinkIcon from '../../app/global/icons/external-link';
-import getSiteContent from '../../app/global/api/mocks/site';
+import getSiteContent from '../fixtures/site';
 
 // The card's own copy lives with the rest of the site content, not in the story.
 //

@@ -4,14 +4,14 @@ import Card from "@/app/global/components/card";
 import TechStack from "@/app/global/components/tech-stack";
 import ExternalLinkIcon from "@/app/global/icons/external-link";
 import GithubIcon from "@/app/global/icons/github";
-import getSiteContent from "@/app/global/api/mocks/site";
+import getSiteContent from "@/app/global/api/site";
 import { options } from "@/app/global/constants/DateFormat";
 import PageTransition from "@/app/global/components/page-transition";
-import getProjectsCopy from "./api/mocks/projects";
+import getProjectsCopy from "./api/content";
 import getProjects from "./api/projects";
 
-export function generateMetadata(): Metadata {
-    const { header } = getProjectsCopy();
+export async function generateMetadata(): Promise<Metadata> {
+    const { header } = await getProjectsCopy();
 
     return { title: header.title };
 }
@@ -93,8 +93,8 @@ async function ProjectsList({ copy }: { copy: Omit<ProjectsContent, 'projects'> 
     );
 }
 
-export default function Projects() {
-    const copy = getProjectsCopy();
+export default async function Projects() {
+    const copy = await getProjectsCopy();
 
     return (
         <PageTransition>
