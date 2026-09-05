@@ -6,6 +6,7 @@ import MailIcon from "@/app/global/icons/mail";
 import getSiteContent from "@/app/global/api/mocks/site";
 import { getContactContent } from "./api/mocks/contact";
 import getContactMethods from "./api/contact-methods";
+import getResumeFormCopy from "./api/form";
 import PageTransition from "@/app/global/components/page-transition";
 import ContactMethods from "./components/contact-methods";
 
@@ -22,7 +23,12 @@ const icons: Record<string, ReactNode> = {
 };
 
 export default async function Contact() {
-    const [content, methods, site] = await Promise.all([getContactContent(), getContactMethods(), getSiteContent()]);
+    const [content, methods, site, form] = await Promise.all([
+        getContactContent(),
+        getContactMethods(),
+        getSiteContent(),
+        getResumeFormCopy(),
+    ]);
 
     return (
         <PageTransition>
@@ -40,7 +46,7 @@ export default async function Contact() {
                     mail={content.mail}
                     mail_copy={content.mail_copy}
                     copy={content.methods_copy}
-                    form={content.form}
+                    form={form}
                     card={site.card}
                     icons={icons}
                 />

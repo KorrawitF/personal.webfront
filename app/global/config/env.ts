@@ -15,13 +15,6 @@ export function text(value: string | undefined, fallback: string): string {
     return value?.trim() || fallback;
 }
 
-/** A whole number, or the fallback when the value is missing or is not one. */
-export function count(value: string | undefined, fallback: number): number {
-    const parsed = Number(value?.trim());
-
-    return value?.trim() && Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback;
-}
-
 /** An origin with any trailing slash dropped, so a path can be appended to it. */
 export function origin(value: string | undefined, fallback: string): string {
     return text(value, fallback).replace(/\/+$/, '');

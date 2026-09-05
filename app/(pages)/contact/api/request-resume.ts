@@ -1,7 +1,8 @@
 'use server'
 
 import fill from "@/app/global/utils/format";
-import { getResumeFormCopy, getResumeMail, sendResumeMail } from "./mocks/contact";
+import { getResumeMail, sendResumeMail } from "./mocks/contact";
+import getResumeFormCopy from "./form";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -40,7 +41,7 @@ function validate(request: ResumeRequest, copy: ResumeFormCopy): ResumeFormError
 }
 
 export default async function requestResume(_state: ResumeFormState, formData: FormData): Promise<ResumeFormState> {
-    const copy = getResumeFormCopy();
+    const copy = await getResumeFormCopy();
     const request = toRequest(formData);
     const errors = validate(request, copy);
 

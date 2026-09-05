@@ -1,4 +1,4 @@
-import { count, origin, text } from "./env";
+import { origin, text } from "./env";
 
 /**
  * Who the site belongs to and where it lives, read once from the environment.
@@ -32,12 +32,3 @@ const site = {
 } as const;
 
 export default site;
-
-/**
- * Limits the contact form enforces. The résumé itself, and every contact channel it
- * prints, are content the backend serves — they are not configuration.
- */
-export const resume = {
-    /** Longest message the form takes, enforced in the field and again in the action. */
-    message_max_length: count(process.env.NEXT_PUBLIC_RESUME_MESSAGE_MAX_LENGTH, 1000),
-} as const;
