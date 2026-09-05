@@ -5,6 +5,7 @@ import LinkedInIcon from "@/app/global/icons/linkedin";
 import MailIcon from "@/app/global/icons/mail";
 import getSiteContent from "@/app/global/api/mocks/site";
 import { getContactContent } from "./api/mocks/contact";
+import getContactMethods from "./api/contact-methods";
 import PageTransition from "@/app/global/components/page-transition";
 import ContactMethods from "./components/contact-methods";
 
@@ -21,7 +22,7 @@ const icons: Record<string, ReactNode> = {
 };
 
 export default async function Contact() {
-    const [content, site] = await Promise.all([getContactContent(), getSiteContent()]);
+    const [content, methods, site] = await Promise.all([getContactContent(), getContactMethods(), getSiteContent()]);
 
     return (
         <PageTransition>
@@ -35,7 +36,7 @@ export default async function Contact() {
                 </header>
 
                 <ContactMethods
-                    methods={content.methods}
+                    methods={methods}
                     mail={content.mail}
                     mail_copy={content.mail_copy}
                     copy={content.methods_copy}

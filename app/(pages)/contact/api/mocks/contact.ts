@@ -1,33 +1,6 @@
 import fill from "@/app/global/utils/format";
 import site, { resume } from "@/app/global/config/site";
 
-export default function getContactMethods(): ContactMethod[] {
-    return [
-        {
-            id: "email",
-            name: "Email",
-            summary: "Leave your details and my résumé lands in your inbox, together with every way to reach me back.",
-            status: "available",
-        },
-        {
-            id: "linkedin",
-            name: "LinkedIn",
-            handle: "in/korrawit",
-            summary: "The longer work history, endorsements and anything worth a formal introduction.",
-            detail: "Not wired up yet — the profile link goes live once the page is finished.",
-            status: "pending",
-        },
-        {
-            id: "github",
-            name: "GitHub",
-            handle: "@korrawit",
-            summary: "Source for the public projects, plus the smaller experiments that never made the projects page.",
-            detail: "Not wired up yet — waiting on a tidy-up of the public repositories.",
-            status: "pending",
-        },
-    ];
-}
-
 export function getResumeMail(): ResumeMail {
     return {
         subject: fill("{owner} — résumé and contact details", { owner: site.owner }),
@@ -87,13 +60,12 @@ export function getResumeFormCopy(): ResumeFormCopy {
     };
 }
 
-export async function getContactContent(): Promise<ContactContent> {
+export async function getContactContent(): Promise<Omit<ContactContent, 'methods'>> {
     return {
         header: {
             title: "Contact",
             lead: "The quickest route is email — tell me where to send things and my résumé arrives in your inbox with my own contact details attached, so you can reply straight back. Pick another channel on the right to switch to it.",
         },
-        methods: getContactMethods(),
         mail: getResumeMail(),
         mail_copy: {
             includes_label: "What lands in your inbox",
