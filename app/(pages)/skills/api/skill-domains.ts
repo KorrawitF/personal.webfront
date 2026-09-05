@@ -10,6 +10,7 @@ type BackendSkillExperience = {
 
 type BackendSkill = {
     id: number,
+    name: string | null,
     domainId: number,
     level: number,
     summary: string,
@@ -28,8 +29,12 @@ type BackendSkillDomain = {
     skills: BackendSkill[] | null,
 };
 
-/** The backend has no `name` column on skills yet; fall back to the icon slug, or the id. */
+/** Falls back to the icon slug, or the id, for rows created before `name` was backfilled. */
 function toSkillName(skill: BackendSkill): string {
+    if (skill.name) {
+        return skill.name;
+    }
+
     if (skill.icon) {
         return skill.icon.charAt(0).toUpperCase() + skill.icon.slice(1);
     }
