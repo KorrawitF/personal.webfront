@@ -1,7 +1,7 @@
 'use server'
 
 import fill from "@/app/global/utils/format";
-import { sendResumeMail } from "./mocks/contact";
+import sendResumeMail from "./submit-resume";
 import getContactContent from "./content";
 import getResumeFormCopy from "./form";
 

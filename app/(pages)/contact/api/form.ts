@@ -27,7 +27,7 @@ type BackendForm = {
     fields: BackendFormField[],
 };
 
-const RESUME_FORM_SLUG = 'resume-request';
+export const RESUME_FORM_SLUG = 'resume-request';
 
 function toFormField(field: BackendFormField): FormField {
     return {
