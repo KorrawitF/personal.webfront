@@ -6,7 +6,7 @@ import requestResume from "../api/request-resume";
 
 const INITIAL_STATE: ResumeFormState = { status: 'idle' };
 
-const SCROLLER = "min-h-0 space-y-4 md:flex-1 md:overflow-y-auto md:overscroll-contain md:pr-1 [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin";
+const SCROLLER = "min-h-0 space-y-4 md:flex-1 md:overflow-y-auto md:overscroll-contain md:px-1 [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin";
 const FIELD = "w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white transition-colors placeholder:text-white/30 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60";
 const LABEL = "block text-xs font-semibold uppercase tracking-wide text-white/50";
 
