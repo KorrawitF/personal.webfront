@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import client from "@/app/global/lib/api";
 
 type BackendSkillExperience = {
@@ -42,6 +44,16 @@ function toSkillName(skill: BackendSkill): string {
     return `Skill ${skill.id}`;
 }
 
+function resolveIcon(icon: string | null): string | undefined {
+    if (!icon?.startsWith('/')) {
+        return undefined;
+    }
+
+    const filePath = path.join(process.cwd(), 'public', icon);
+
+    return fs.existsSync(filePath) ? icon : undefined;
+}
+
 function toExperience(experience: BackendSkillExperience): SkillExperience {
     return {
         id: experience.id,
@@ -57,7 +69,7 @@ function toSkill(skill: BackendSkill): Skill {
         name: toSkillName(skill),
         parent: skill.parent ?? undefined,
         level: skill.level,
-        icon: skill.icon?.startsWith('/') ? skill.icon : undefined,
+        icon: resolveIcon(skill.icon),
         summary: skill.summary,
         tools: skill.tools ?? [],
         use_cases: skill.useCases ?? [],
