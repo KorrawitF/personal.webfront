@@ -27,7 +27,11 @@ export default function SkillDetail({ domain, skill, labels, tech_stack, classNa
                         }}
                     >
                         {skill.icon
-                            ? <Image className="h-6 w-6 object-contain" src={skill.icon} alt="" />
+                            ? (
+                                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 p-1.5">
+                                    <Image className="h-full w-full object-contain" src={skill.icon} alt="" />
+                                </span>
+                            )
                             : <span className="text-sm font-bold" style={{ color: domain.color }}>{skill.name.slice(0, 2).toUpperCase()}</span>}
                     </span>
                     <div className="min-w-0 flex-1">

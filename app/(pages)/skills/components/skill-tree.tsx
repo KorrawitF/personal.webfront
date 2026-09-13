@@ -138,11 +138,16 @@ export default function SkillTree({ domain, selectedId, activeIds, onSelect }: S
                                     }}
                                 >
                                     {skill.icon ? (
-                                        <Image
-                                            className={`h-5 w-5 object-contain ${locked ? 'opacity-40' : ''}`}
-                                            src={skill.icon}
-                                            alt=""
-                                        />
+                                        <span
+                                            className={`flex items-center justify-center rounded-full bg-white/90 p-1 ${locked ? 'opacity-40' : ''}`}
+                                            style={{ width: size * 0.7, height: size * 0.7 }}
+                                        >
+                                            <Image
+                                                className="h-full w-full object-contain"
+                                                src={skill.icon}
+                                                alt=""
+                                            />
+                                        </span>
                                     ) : (
                                         <span
                                             aria-hidden="true"
