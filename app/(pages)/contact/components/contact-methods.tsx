@@ -3,13 +3,18 @@
 import { startTransition, useState, ViewTransition } from "react";
 import type { ReactNode } from "react";
 import Card from "@/app/global/components/card";
+import fill from "@/app/global/utils/format";
 import MailContents from "./mail-contents";
 import ResumeForm from "./resume-form";
 
 const PANEL = "min-h-0 space-y-4 md:flex-1 md:overflow-y-auto md:overscroll-contain md:pr-1 [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin";
 const PILL = "shrink-0 rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 text-xs font-medium text-secondary";
 
-function toCard(method: ContactMethod, status: string, icon?: ReactNode): CardDetail {
+function toCard(method: ContactMethod, status: string, copy: ContactMethodsCopy, icon?: ReactNode): CardDetail {
+    // Only the email method drives the résumé-request form; any other
+    // available method with an href just links out (e.g. LinkedIn, GitHub).
+    const isLinkOut = method.status === 'available' && method.id !== 'email' && Boolean(method.href);
+
     return {
         id: method.id,
         title: method.name,
@@ -18,6 +23,7 @@ function toCard(method: ContactMethod, status: string, icon?: ReactNode): CardDe
         detail: method.detail,
         icon,
         status,
+        links: isLinkOut ? [{ label: fill(copy.visit_link, { title: method.name }), href: method.href! }] : undefined,
     };
 }
 
@@ -31,10 +37,12 @@ export default function ContactMethods({ methods, mail, mail_copy, copy, form, c
     const active = methods.find((method) => method.id === activeId) ?? fallback;
     const alternatives = methods.filter((method) => method.id !== active.id);
     const email = methods.find((method) => method.id === 'email');
+    const isEmailForm = active.id === 'email' && active.status === 'available';
+    const isLinkOut = !isEmailForm && active.status === 'available' && Boolean(active.href);
 
-    // A form fills the column so it can scroll inside; a short pending panel
-    // sizes to its content instead of stretching into empty space.
-    const fills = active.status === 'available';
+    // The form fills the column so it can scroll inside; a short pending or
+    // link-out panel sizes to its content instead of stretching into empty space.
+    const fills = isEmailForm;
 
     return (
         <div className="stagger grid grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-3 md:overflow-hidden">
@@ -42,10 +50,10 @@ export default function ContactMethods({ methods, mail, mail_copy, copy, form, c
                 {/* Keyed, so switching method reads as one panel leaving and
                     another arriving rather than an in-place content jump. */}
                 <ViewTransition key={active.id} name="contact-panel" share="swap" default="none">
-                    <Card item={toCard(active, copy.status[active.status], icons[active.id])} labels={card} flippable={false} className="w-full md:max-h-full">
-                        {active.status === 'available' ? (
+                    <Card item={toCard(active, copy.status[active.status], copy, icons[active.id])} labels={card} flippable={false} className="w-full md:max-h-full">
+                        {isEmailForm ? (
                             <ResumeForm copy={form} intro={<MailContents mail={mail} copy={mail_copy} />} />
-                        ) : (
+                        ) : isLinkOut ? null : (
                             <div className="flex min-h-0 flex-1 flex-col gap-4">
                                 <div className={PANEL}>
                                     <p className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">

@@ -31,6 +31,8 @@ declare global {
         alternatives: string,
         pending_note: string,
         use_email: string,
+        /** Label for the link-out button on non-email methods. Takes a {title} placeholder. */
+        visit_link: string,
     }
 
     type MailContentsCopy = {
