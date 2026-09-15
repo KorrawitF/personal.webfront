@@ -4,6 +4,13 @@ import TechStack from "@/app/global/components/tech-stack";
 const MAX_LEVEL = 5;
 const SCROLLER = "min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain pr-1 [scrollbar-color:color-mix(in_srgb,var(--foreground)_60%,transparent)_transparent] scrollbar-thin";
 
+// Levels 1-2 -> Beginner, 3 -> Intermediate, 4 -> Advance, 5 -> Expert.
+const LEVEL_LABELS = ["Beginner", "Beginner", "Intermediate", "Advanced", "Expert"];
+
+function levelLabel(level: number): string {
+    return LEVEL_LABELS[Math.max(0, level - 1)] ?? LEVEL_LABELS[0];
+}
+
 function Heading({ children }: { children: string }) {
     return <h3 className="text-xs font-semibold uppercase tracking-wide text-white/50">{children}</h3>;
 }
@@ -56,7 +63,7 @@ export default function SkillDetail({ domain, skill, labels, tech_stack, classNa
                         ))}
                     </span>
                     <span className="text-sm text-white/70">
-                        {labels.levels[skill.level] ?? labels.levels[0]}
+                        {levelLabel(skill.level)}
                         <span className="text-white/40"> &middot; {skill.level}/{MAX_LEVEL}</span>
                     </span>
                 </div>
