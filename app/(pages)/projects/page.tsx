@@ -16,9 +16,14 @@ export async function generateMetadata(): Promise<Metadata> {
     return { title: header.title };
 }
 
-function toPeriod(project: Project, present: string): string {
+function toPeriod(project: Project): string {
     const start = project.start_date.toLocaleDateString('en-US', options);
-    const end = project.end_date ? project.end_date.toLocaleDateString('en-US', options) : present;
+
+    if (!project.end_date) {
+        return start;
+    }
+
+    const end = project.end_date.toLocaleDateString('en-US', options);
 
     return `${start} - ${end}`;
 }
@@ -58,7 +63,7 @@ function toCard(project: Project, copy: Omit<ProjectsContent, 'projects'>): Card
         detail: project.detail,
         banner: project.banner,
         icon: project.icon,
-        period: toPeriod(project, copy.present),
+        period: toPeriod(project),
         status: project.status,
         highlights: project.highlights,
         links: toLinks(project, copy.links),

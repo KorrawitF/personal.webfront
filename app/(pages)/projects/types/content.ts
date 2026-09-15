@@ -9,8 +9,6 @@ declare global {
             demo: string,
         },
         tech_stack_label: string,
-        /** Shown instead of an end date for an ongoing project. */
-        present: string,
         projects: Project[],
     }
 }
