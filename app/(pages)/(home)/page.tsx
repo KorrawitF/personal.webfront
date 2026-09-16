@@ -1,3 +1,5 @@
+'use cache'
+
 import type { ReactNode } from "react";
 import Image from "@/app/global/components/image";
 import GithubIcon from "@/app/global/icons/github";
