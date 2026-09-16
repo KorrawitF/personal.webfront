@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.vscode
+.storybook
+storybook-static
+stories
+scripts
+coverage
+.env*
+!.env.example
+*.tsbuildinfo
+README.md
+AGENTS.md
+CLAUDE.md
