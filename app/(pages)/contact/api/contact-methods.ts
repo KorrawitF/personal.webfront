@@ -1,4 +1,4 @@
-import client from "@/app/global/lib/api";
+import client, { isConnectionError } from "@/app/global/lib/api";
 
 type BackendContactMethod = {
     id: number,
@@ -26,7 +26,15 @@ function toContactMethod(method: BackendContactMethod): ContactMethod {
 }
 
 export default async function getContactMethods(): Promise<ContactMethod[]> {
-    const methods = await client.get<BackendContactMethod[]>('/contact-methods');
+    let methods: BackendContactMethod[];
+    try {
+        methods = await client.get<BackendContactMethod[]>('/contact-methods');
+    } catch (error) {
+        if (isConnectionError(error)) {
+            return [];
+        }
+        throw error;
+    }
 
     return methods.map(toContactMethod);
 }

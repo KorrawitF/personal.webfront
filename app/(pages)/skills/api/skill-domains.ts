@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import client from "@/app/global/lib/api";
+import client, { isConnectionError } from "@/app/global/lib/api";
 
 type BackendSkillExperience = {
     id: number,
@@ -88,7 +88,15 @@ function toDomain(domain: BackendSkillDomain): SkillDomain {
 }
 
 export default async function getSkillDomains(): Promise<SkillDomain[]> {
-    const domains = await client.get<BackendSkillDomain[]>('/skill-domains');
+    let domains: BackendSkillDomain[];
+    try {
+        domains = await client.get<BackendSkillDomain[]>('/skill-domains');
+    } catch (error) {
+        if (isConnectionError(error)) {
+            return [];
+        }
+        throw error;
+    }
 
     return domains.map(toDomain);
 }

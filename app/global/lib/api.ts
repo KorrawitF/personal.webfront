@@ -46,6 +46,25 @@ function del(path: string, init?: RequestInit): Promise<void> {
     return request<void>(path, { ...init, method: 'DELETE' });
 }
 
+const CONNECTION_ERROR_CODES = new Set([
+    'ECONNREFUSED', 'ENOTFOUND', 'ECONNRESET', 'ETIMEDOUT', 'EAI_AGAIN', 'EHOSTUNREACH',
+]);
+
+/**
+ * True only for "the backend isn't reachable at all" (e.g. no network during
+ * a Docker build) — never for a real HTTP error response. Callers use this to
+ * decide whether a failure is safe to fall back from; an ApiError (or any
+ * other non-network failure) always propagates.
+ */
+export function isConnectionError(error: unknown): boolean {
+    if (!(error instanceof TypeError)) {
+        return false;
+    }
+
+    const code = (error.cause as { code?: string } | undefined)?.code;
+    return code !== undefined && CONNECTION_ERROR_CODES.has(code);
+}
+
 const client = { get, post, put, del };
 
 export default client;

@@ -1,4 +1,4 @@
-import client from "@/app/global/lib/api";
+import client, { isConnectionError } from "@/app/global/lib/api";
 
 type BackendProject = {
     id: number,
@@ -39,7 +39,15 @@ function toProject(project: BackendProject): Project {
 }
 
 export default async function getProjects(): Promise<Project[]> {
-    const projects = await client.get<BackendProject[]>('/projects');
+    let projects: BackendProject[];
+    try {
+        projects = await client.get<BackendProject[]>('/projects');
+    } catch (error) {
+        if (isConnectionError(error)) {
+            return [];
+        }
+        throw error;
+    }
 
     return projects.map(toProject);
 }

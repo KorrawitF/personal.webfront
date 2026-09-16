@@ -27,9 +27,9 @@ export default function SkillExplorer({ domains, labels, tech_stack }: SkillExpl
     );
 
     const fallback = selections.find((entry) => entry.skill.parent && entry.skill.level === 5) ?? selections[0];
-    const [selectedId, setSelectedId] = useState(fallback.skill.id);
+    const [selectedId, setSelectedId] = useState(fallback?.skill.id);
     const selected = selections.find((entry) => entry.skill.id === selectedId) ?? fallback;
-    const activeIds = useMemo(() => branch(selected.domain, selected.skill), [selected]);
+    const activeIds = useMemo(() => selected ? branch(selected.domain, selected.skill) : new Set<string>(), [selected]);
 
     const trees = useRef(new Map<string, HTMLDivElement | null>());
     const canvas = useRef<HTMLDivElement>(null);
@@ -55,6 +55,10 @@ export default function SkillExplorer({ domains, labels, tech_stack }: SkillExpl
         startTransition(() => setSelectedId(domain.skills[0].id));
         trees.current.get(domain.id)?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
     };
+
+    if (!selected) {
+        return null;
+    }
 
     return (
         <div className="stagger flex min-h-0 flex-col gap-4 lg:flex-1 lg:overflow-hidden">

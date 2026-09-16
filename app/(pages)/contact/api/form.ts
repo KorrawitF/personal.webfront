@@ -1,4 +1,4 @@
-import client from "@/app/global/lib/api";
+import client, { isConnectionError } from "@/app/global/lib/api";
 
 type BackendFormField = {
     id: number,
@@ -78,8 +78,41 @@ function toResumeFormCopy(form: BackendForm): ResumeFormCopy {
     };
 }
 
+const FALLBACK: ResumeFormCopy = {
+    fields: {
+        name: { label: 'Name' },
+        email: { label: 'Email' },
+        company: { label: 'Company' },
+        role: { label: 'Role' },
+        message: { label: 'Message' },
+    },
+    message_max_length: Infinity,
+    optional: 'Optional',
+    submit: 'Send',
+    sending: 'Sending…',
+    note: '',
+    errors: {
+        name_required: 'Name is required.',
+        email_required: 'Email is required.',
+        email_invalid: 'Enter a valid email.',
+        message_too_long: 'Message is too long.',
+        invalid: 'That request could not be sent.',
+        failed: 'Something went wrong. Please try again.',
+    },
+    success: 'Thanks — your resume request was sent.',
+};
+
 export default async function getResumeFormCopy(): Promise<ResumeFormCopy> {
-    const forms = await client.get<BackendForm[]>('/forms');
+    let forms: BackendForm[];
+    try {
+        forms = await client.get<BackendForm[]>('/forms');
+    } catch (error) {
+        if (isConnectionError(error)) {
+            return FALLBACK;
+        }
+        throw error;
+    }
+
     const form = forms.find((candidate) => candidate.slug === RESUME_FORM_SLUG);
 
     if (!form) {

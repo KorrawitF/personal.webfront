@@ -1,4 +1,4 @@
-import client from "@/app/global/lib/api";
+import client, { isConnectionError } from "@/app/global/lib/api";
 
 type BackendWorkExperience = {
     id: number,
@@ -25,7 +25,15 @@ function toExperience(experience: BackendWorkExperience): Experience {
 }
 
 export default async function getWorkExperiences(): Promise<Experience[]> {
-    const experiences = await client.get<BackendWorkExperience[]>('/work-experiences');
+    let experiences: BackendWorkExperience[];
+    try {
+        experiences = await client.get<BackendWorkExperience[]>('/work-experiences');
+    } catch (error) {
+        if (isConnectionError(error)) {
+            return [];
+        }
+        throw error;
+    }
 
     return experiences.map(toExperience);
 }

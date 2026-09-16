@@ -29,12 +29,17 @@ function toCard(method: ContactMethod, status: string, copy: ContactMethodsCopy,
 
 export default function ContactMethods({ methods, mail, mail_copy, copy, form, card, icons }: ContactMethodsProps) {
     const fallback = methods.find((method) => method.status === 'available') ?? methods[0];
-    const [activeId, setActiveId] = useState(fallback.id);
+    const [activeId, setActiveId] = useState(fallback?.id);
 
     // As with the skill panel, the swap has to be async for the cross-fade to run.
     const select = (id: string) => startTransition(() => setActiveId(id));
 
     const active = methods.find((method) => method.id === activeId) ?? fallback;
+
+    if (!active) {
+        return null;
+    }
+
     const alternatives = methods.filter((method) => method.id !== active.id);
     const email = methods.find((method) => method.id === 'email');
     const isEmailForm = active.id === 'email' && active.status === 'available';

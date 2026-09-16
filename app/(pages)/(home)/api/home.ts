@@ -4,8 +4,16 @@ import getContent from "@/app/global/api/content";
 
 type HomeCopy = Omit<HomeContent, 'name' | 'portrait'> & { portrait: string };
 
+const FALLBACK: HomeCopy = {
+    eyebrow: '',
+    greeting: 'Hello',
+    intro: '',
+    actions: [],
+    portrait: '',
+};
+
 export default async function getHomeContent(): Promise<HomeContent> {
-    const copy = await getContent<HomeCopy>('home');
+    const copy = await getContent<HomeCopy>('home', FALLBACK);
 
     return {
         ...copy,
