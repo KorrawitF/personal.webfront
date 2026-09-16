@@ -1,4 +1,5 @@
 import client, { isConnectionError } from "@/app/global/lib/api";
+import { mediaUrl } from "@/app/global/config/api";
 
 type BackendProject = {
     id: number,
@@ -23,8 +24,8 @@ function toProject(project: BackendProject): Project {
         id: project.id,
         name: project.name,
         role: project.role ?? undefined,
-        icon: project.icon ?? undefined,
-        banner: project.banner ?? undefined,
+        icon: project.icon ? mediaUrl(project.icon) : undefined,
+        banner: project.banner ? mediaUrl(project.banner) : undefined,
         summary: project.summary,
         detail: project.detail,
         tech_stack: project.techStack ?? [],

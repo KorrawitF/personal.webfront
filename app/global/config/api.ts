@@ -12,12 +12,15 @@ const api = {
 } as const;
 
 /**
- * Absolute, browser-loadable URL for a backend-hosted asset. CMS content stores
- * the path (e.g. a `/media/{id}/file` route) rather than a full URL, so the same
- * value works no matter which environment/origin the API is reached through.
+ * Browser-loadable path for a backend-hosted asset. CMS content stores the
+ * path exactly as the backend serves it (e.g. `/media/{id}/file`). Handing
+ * that straight to the client would require the browser to resolve
+ * `base_url` itself — often an internal, server-only origin — so instead
+ * this returns a same-origin path proxied through `app/media/[...path]/route.ts`,
+ * which is the only place `base_url` is used for asset requests.
  */
 export function mediaUrl(path: string): string {
-    return `${api.base_url}${path}`;
+    return path;
 }
 
 export default api;
