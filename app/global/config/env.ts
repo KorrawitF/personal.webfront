@@ -3,11 +3,12 @@
  * files in the app that read `process.env`; everything else imports the value
  * from one of them, so a variable is named, defaulted and documented exactly once.
  *
- * The reads there are written out in full — `process.env.NEXT_PUBLIC_SITE_URL`,
- * never `process.env[name]`. Next inlines `NEXT_PUBLIC_*` into the browser bundle
- * by literal substitution at build time, so a lookup through a variable is left
- * alone and comes back undefined on the client. That is why the helpers below take
- * a value and never a variable name.
+ * The reads there are written out in full — `process.env.SITE_URL`, never
+ * `process.env[name]`. Should either module ever add a `NEXT_PUBLIC_*` variable,
+ * Next inlines that prefix into the browser bundle by literal substitution at
+ * build time, so a lookup through a variable is left alone and comes back
+ * undefined on the client. That is why the helpers below take a value and never
+ * a variable name.
  */
 
 /** The value when it carries anything, the fallback when it is missing or blank. */
