@@ -85,9 +85,9 @@ export default function SkillDetail({ domain, skill, labels, tech_stack, classNa
                     </section>
                 )}
 
-                <section className="space-y-2">
-                    <Heading>{labels.experience}</Heading>
-                    {skill.experiences.length ? (
+                {skill.experiences.length > 0 && (
+                    <section className="space-y-2">
+                        <Heading>{labels.experience}</Heading>
                         <ol className="space-y-3">
                             {skill.experiences.map((experience) => (
                                 <li
@@ -103,10 +103,8 @@ export default function SkillDetail({ domain, skill, labels, tech_stack, classNa
                                 </li>
                             ))}
                         </ol>
-                    ) : (
-                        <p className="text-sm text-white/50">{labels.no_experience}</p>
-                    )}
-                </section>
+                    </section>
+                )}
             </div>
         </aside>
     );
