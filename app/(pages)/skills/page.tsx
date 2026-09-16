@@ -1,3 +1,5 @@
+'use cache'
+
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import getSiteContent from "@/app/global/api/site";
@@ -12,11 +14,6 @@ export async function generateMetadata(): Promise<Metadata> {
     return { title: header.title };
 }
 
-/**
- * Isolated behind its own `await` so the header above can prerender: the
- * domain tree comes from a live backend call that cache components can't
- * statically cache, so it has to stay inside a Suspense boundary instead.
- */
 async function SkillExplorerSection({ labels }: { labels: SkillDetailLabels }) {
     const [domains, site] = await Promise.all([getSkillDomains(), getSiteContent()]);
 

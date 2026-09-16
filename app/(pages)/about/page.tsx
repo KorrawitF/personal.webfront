@@ -1,3 +1,5 @@
+'use cache'
+
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Image from "@/app/global/components/image";
