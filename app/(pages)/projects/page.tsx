@@ -1,5 +1,5 @@
 'use cache'
-
+cacheLife('hours')
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Card from "@/app/global/components/card";
