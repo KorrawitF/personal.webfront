@@ -8,7 +8,6 @@ import getSkillsCopy from "./api/content";
 import getSkillDomains from "./api/skill-domains";
 import PageTransition from "@/app/global/components/page-transition";
 import SkillExplorer from "./components/skill-explorer";
-cacheLife('hours')
 
 export async function generateMetadata(): Promise<Metadata> {
     const { header } = await getSkillsCopy();
@@ -23,6 +22,7 @@ async function SkillExplorerSection({ labels }: { labels: SkillDetailLabels }) {
 }
 
 export default async function Skills() {
+    cacheLife('hours')
     const { header, detail } = await getSkillsCopy();
 
     return (

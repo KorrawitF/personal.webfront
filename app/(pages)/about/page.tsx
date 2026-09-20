@@ -12,7 +12,6 @@ import PageTransition from "@/app/global/components/page-transition";
 import getAboutCopy from "./api/content";
 import getWorkExperiences from "./api/work-experiences";
 import { cacheLife } from 'next/cache'
-cacheLife('hours')
 
 export async function generateMetadata(): Promise<Metadata> {
     const { header } = await getAboutCopy();
@@ -127,6 +126,7 @@ async function AboutBody({ copy }: { copy: Omit<AboutContent, 'facts' | 'experie
 }
 
 export default async function About() {
+    cacheLife('hours')
     const copy = await getAboutCopy();
 
     return (

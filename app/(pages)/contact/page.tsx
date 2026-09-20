@@ -13,7 +13,6 @@ import getResumeFormCopy from "./api/form";
 import PageTransition from "@/app/global/components/page-transition";
 import ContactMethods from "./components/contact-methods";
 import { cacheLife } from 'next/cache'
-cacheLife('hours')
 
 export async function generateMetadata(): Promise<Metadata> {
     const content = await getContactContent();
@@ -50,6 +49,7 @@ async function ContactBody({ content, card }: { content: Omit<ContactContent, 'm
 }
 
 export default async function Contact() {
+    cacheLife('hours')
     const [content, site] = await Promise.all([getContactContent(), getSiteContent()]);
 
     return (

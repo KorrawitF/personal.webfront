@@ -9,7 +9,6 @@ import PageTransition from "@/app/global/components/page-transition";
 import TransitionLink from "@/app/global/components/transition-link";
 import getHomeContent from "./api/home";
 import { cacheLife } from 'next/cache'
-cacheLife('hours')
 
 const icons: Record<string, ReactNode> = {
     Email: <MailIcon className="h-5 w-5" />,
@@ -18,6 +17,7 @@ const icons: Record<string, ReactNode> = {
 };
 
 export default async function Home() {
+    cacheLife('hours')
     const content = await getHomeContent();
 
     return (

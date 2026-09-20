@@ -12,7 +12,6 @@ import PageTransition from "@/app/global/components/page-transition";
 import getProjectsCopy from "./api/content";
 import getProjects from "./api/projects";
 import { cacheLife } from 'next/cache'
-cacheLife('hours')
 
 export async function generateMetadata(): Promise<Metadata> {
     const { header } = await getProjectsCopy();
@@ -103,6 +102,7 @@ async function ProjectsList({ copy }: { copy: Omit<ProjectsContent, 'projects'> 
 }
 
 export default async function Projects() {
+    cacheLife('hours')
     const copy = await getProjectsCopy();
 
     return (
