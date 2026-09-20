@@ -1,5 +1,5 @@
 'use cache'
-cacheLife('hours')
+
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Image from "@/app/global/components/image";
@@ -11,6 +11,8 @@ import fill from "@/app/global/utils/format";
 import PageTransition from "@/app/global/components/page-transition";
 import getAboutCopy from "./api/content";
 import getWorkExperiences from "./api/work-experiences";
+import { cacheLife } from 'next/cache'
+cacheLife('hours')
 
 export async function generateMetadata(): Promise<Metadata> {
     const { header } = await getAboutCopy();

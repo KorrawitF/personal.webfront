@@ -1,5 +1,5 @@
 'use cache'
-cacheLife('hours')
+
 import type { ReactNode } from "react";
 import Image from "@/app/global/components/image";
 import GithubIcon from "@/app/global/icons/github";
@@ -8,6 +8,8 @@ import MailIcon from "@/app/global/icons/mail";
 import PageTransition from "@/app/global/components/page-transition";
 import TransitionLink from "@/app/global/components/transition-link";
 import getHomeContent from "./api/home";
+import { cacheLife } from 'next/cache'
+cacheLife('hours')
 
 const icons: Record<string, ReactNode> = {
     Email: <MailIcon className="h-5 w-5" />,

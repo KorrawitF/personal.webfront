@@ -1,5 +1,5 @@
 'use cache'
-cacheLife('hours')
+
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -12,6 +12,8 @@ import getContactMethods from "./api/contact-methods";
 import getResumeFormCopy from "./api/form";
 import PageTransition from "@/app/global/components/page-transition";
 import ContactMethods from "./components/contact-methods";
+import { cacheLife } from 'next/cache'
+cacheLife('hours')
 
 export async function generateMetadata(): Promise<Metadata> {
     const content = await getContactContent();
