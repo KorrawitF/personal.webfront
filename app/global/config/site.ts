@@ -12,6 +12,16 @@ import { origin, text } from "./env";
  * builds and runs with no `.env` file at all. See `.env.example` for the full list.
  */
 
+/**
+ * A GA4 measurement ID (`G-XXXXXXXXXX`), or undefined when analytics is off.
+ * The ID ends up inside an inline script, so anything that does not look like
+ * one is treated as unset rather than passed through.
+ */
+function analyticsId(value: string | undefined): string | undefined {
+    const id = value?.trim();
+    return id && /^G-[A-Z0-9]+$/.test(id) ? id : undefined;
+}
+
 /** The full name behind the site. Most other defaults are derived from it. */
 const owner = text(process.env.OWNER_NAME, "Korrawit Soodnalao");
 
@@ -32,6 +42,8 @@ const site = {
     url: origin(process.env.SITE_URL, "http://localhost:3000"),
     /** BCP 47 tag for the lang attribute on <html>. */
     locale: text(process.env.SITE_LOCALE, "en"),
+    /** Google Analytics measurement ID. Unset turns analytics and its consent banner off. */
+    analytics_id: analyticsId(process.env.GA_MEASUREMENT_ID),
 } as const;
 
 export default site;

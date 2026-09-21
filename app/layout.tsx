@@ -1,8 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./global/components/navbar";
+import Analytics from "./global/components/analytics";
 import getSiteContent from "./global/api/site";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteContent();
@@ -47,6 +49,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <main className="flex min-h-dvh flex-col px-1 pt-20">
           {children}
         </main>
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
       </body>
     </html>
   );
