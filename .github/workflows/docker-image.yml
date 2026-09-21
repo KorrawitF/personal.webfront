@@ -65,4 +65,4 @@ jobs:
           echo "::error::The WEBHOOK_URL secret is not set."
           exit 1
         fi
-        curl --fail --silent --show-error --location --max-time 30 --retry 3 "$WEBHOOK_URL"
+        curl --verbose --location --max-time 30 --write-out "\nHTTP status: %{http_code}\n" "$WEBHOOK_URL"
