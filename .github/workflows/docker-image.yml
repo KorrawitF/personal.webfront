@@ -50,3 +50,19 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  call-webhook:
+    needs: build-and-push
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Call webhook
+      env:
+          WEBHOOK_URL: ${{ secrets.PORTAINERHOOK }}
+      run: |
+        if [ -z "$WEBHOOK_URL" ]; then
+          echo "::error::The WEBHOOK_URL secret is not set."
+          exit 1
+        fi
+        curl --fail --silent --show-error --location --max-time 30 --retry 3 "$WEBHOOK_URL"
