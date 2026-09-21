@@ -59,7 +59,7 @@ jobs:
     steps:
     - name: Call webhook
       env:
-          WEBHOOK_URL: ${{ secrets.PORTAINERHOOK }}
+          WEBHOOK_URL: ${{ secrets.PORTAINER_HOOK }}
       run: |
         if [ -z "$WEBHOOK_URL" ]; then
           echo "::error::The WEBHOOK_URL secret is not set."
